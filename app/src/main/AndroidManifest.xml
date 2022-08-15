@@ -9,19 +9,12 @@
         android:required="false" />
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission
         android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -44,12 +37,15 @@
         <activity
             android:name=".PostsActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="" />
+            android:launchMode="singleTask" />
         <activity android:name=".HomeScreen" />
         <activity android:name=".MychatsActivity" />
         <activity android:name=".Myrequests" />
-        <activity android:name=".MessageActivity" />
+        <activity
+            android:name=".MessageActivity"
+            android:excludeFromRecents="true">
+
+        </activity>
         <activity android:name=".Notifications_Class" />
         <activity android:name=".DonorPreview" />
         <activity android:name=".Profile" />
@@ -82,8 +78,8 @@
         <activity android:name=".TermsConditions" />
         <activity
             android:name=".EntryScreen"
-            android:theme="@style/SplashTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

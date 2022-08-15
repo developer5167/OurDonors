@@ -57,6 +57,7 @@ public class AdapterForNotifications extends RecyclerView.Adapter<AdapterForNoti
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                  myAccountDetails = snapshot.getValue(MyAccountDetails.class);
                 holder.name.setText(myAccountDetails.getName());
+                holder.bg.setText(myAccountDetails.getBg());
                 Picasso.with(contex).load(myAccountDetails.getImg_url()).into(holder.profile_pic);
 
             }

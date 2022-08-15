@@ -4,14 +4,14 @@ public class Chats {
     private String sender;
     private String receiver;
     private String msg;
-    private boolean is_seen;
+    private String is_seen;
     private String type;
 
-    public boolean isIs_seen() {
+    public String getIs_seen() {
         return is_seen;
     }
 
-    public void setIs_seen(boolean is_seen) {
+    public void setIs_seen(String is_seen) {
         this.is_seen = is_seen;
     }
 

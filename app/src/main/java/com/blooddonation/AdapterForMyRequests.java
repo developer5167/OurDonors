@@ -52,20 +52,11 @@ public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyReque
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myAccountDetails = new MyAccountDetails();
-                HashMap<String, String> hashMap = (HashMap<String, String>) snapshot.getValue();
-                myAccountDetails.setName(hashMap.get("name"));
-                myAccountDetails.setAge(hashMap.get("age"));
-                myAccountDetails.setLocation(hashMap.get("location"));
-                myAccountDetails.setBg(hashMap.get("bg"));
-                myAccountDetails.setImg_url(hashMap.get("img_url"));
-                Log.e("PPPPPPP    ", myAccountDetails.getAge() + "  " + myAccountDetails.getName());
+                myAccountDetails = snapshot.getValue(MyAccountDetails.class);
+                holder.name.setText(myAccountDetails.getName());
                 holder.name.setText(myAccountDetails.getName());
                 holder.bg.setText("You Requested " + myAccountDetails.getName() + " for Blood");
-                myAccountDetails.setMy_id(hashMap.get("my_id"));
-                Picasso.with(contex)
-                        .load(myAccountDetails.getImg_url())
-                        .into(holder.profile_pic);
+                Picasso.with(contex).load(myAccountDetails.getImg_url()).into(holder.profile_pic);
             }
 
             @Override

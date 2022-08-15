@@ -130,6 +130,7 @@ public class EntryScreen extends AppCompatActivity {
                     latLngModel.setAddress(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress());
                     latLngModel.setPinCode(extractDigits(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress()));
                     startActivity(new Intent(EntryScreen.this,MainActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(EntryScreen.this, "response  " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }

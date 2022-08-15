@@ -52,32 +52,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Chats chats = messages_chat.get(position);
-        if (chats.getType().equals("message")) {
-            holder.show_message.setText(chats.getMsg());
-            holder.is_image_seen.setVisibility(View.GONE);
-        } else {
-            holder.show_message.setVisibility(View.GONE);
-            holder.image_msg_lay.setVisibility(View.VISIBLE);
-            holder.seen.setVisibility(View.GONE);
-            holder.is_image_seen.setVisibility(View.VISIBLE);
-            Picasso.with(context)
-                    .load(Uri.parse(chats.getMsg()))
-                    .into(holder.image_msg);
-        }
-
-        if (position == messages_chat.size() - 1) {
-            if (chats.isIs_seen()) {
-                holder.seen.setText("seen");
-//                holder.is_image_seen.setText("seen");
-            } else {
-                holder.seen.setText("Delivered");
-//                holder.is_image_seen.setText("Delivered");
-            }
+        holder.show_message.setText(chats.getMsg());
+        if (position == messages_chat.size() - 1 && chats.getSender().equals(firebaseUser.getUid())) {
+            holder.seen.setVisibility(View.VISIBLE);
+            holder.seen.setText(chats.getIs_seen());
         } else {
             holder.seen.setVisibility(View.GONE);
 
         }
-//        holder.setIsRecyclable(false);
     }
 
 
@@ -89,19 +71,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     static class ViewHolder extends RecyclerView.ViewHolder {
         EmojiconTextView show_message;
         CircleImageView msg_pro;
-        TextView seen, is_image_seen;
-        ImageView image_msg;
-        RelativeLayout image_msg_lay;
+        TextView seen;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             show_message = itemView.findViewById(R.id.show_messsage);
             seen = itemView.findViewById(R.id.seen);
             msg_pro = itemView.findViewById(R.id.msg_pro);
-            image_msg = itemView.findViewById(R.id.image_message);
-            image_msg_lay = itemView.findViewById(R.id.image_msg_lay);
-            is_image_seen = itemView.findViewById(R.id.img_seen);
-
         }
     }
 

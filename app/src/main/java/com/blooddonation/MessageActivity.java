@@ -241,7 +241,7 @@ public class MessageActivity extends AppCompatActivity {
             hashMap.put("msg", mesg);
             hashMap.put("sender", firebaseUser.getUid());
             hashMap.put("receiver", user);
-            hashMap.put("is_seen", false);
+            hashMap.put("is_seen", "sent");
             databaseReference.child("chats").child(uniqueKey).push().setValue(hashMap);
             editText.setText("");
             if (!user1.equals(user2)) {
@@ -260,6 +260,7 @@ public class MessageActivity extends AppCompatActivity {
                     Chats chats = dataSnapshot1.getValue(Chats.class);
                     messags.add(chats);
                     messageAdapter.notifyDataSetChanged();
+                    chat_recyclerView.scrollToPosition(messags.size() - 1);
                 }
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chats").child(uniqueKey);
                 reference.addValueEventListener(new ValueEventListener() {
@@ -270,7 +271,7 @@ public class MessageActivity extends AppCompatActivity {
                             Chats chat = snapshot.getValue(Chats.class);
                             if (chat != null && chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid)) {
                                 HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put("is_seen", true);
+                                hashMap.put("is_seen", "seen");
                                 if (v1.equals(v2)) {
                                     snapshot.getRef().updateChildren(hashMap);
                                 }

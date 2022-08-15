@@ -17,17 +17,24 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.blooddonation.Chats;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.blooddonation.MessageActivity;
 import com.blooddonation.Notifications_Class;
 
+import java.util.HashMap;
+
 public class MyFirebaseMessaging extends FirebaseMessagingService {
-    String friend_request, uniqueKey;
+    String friend_request, uniqueKey, user, sented;
+    FirebaseUser firebaseUser;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -38,7 +45,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         String currentUser = preferences.getString("currentuser", "none");
 
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null && sented.equals(firebaseUser.getUid())) {
             if (!currentUser.equals(user)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,6 +54,8 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                 } else {
                     sendNotification(remoteMessage);
                 }
+                update();
+
             }
         }
     }
@@ -69,9 +79,11 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void sendOreoNotification(RemoteMessage remoteMessage) {
         PendingIntent pendingIntent;
         Uri defaultSound;
-        String user = remoteMessage.getData().get("user");
+        user = remoteMessage.getData().get("user");
+        sented = remoteMessage.getData().get("sented");
+
         String icon = remoteMessage.getData().get("icon");
-        String uniqueKey = remoteMessage.getData().get("uniqueKey");
+        uniqueKey = remoteMessage.getData().get("uniqueKey");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         friend_request = remoteMessage.getData().get("friend_request");
@@ -82,6 +94,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         intent = new Intent(this, MessageActivity.class);
         bundle.putString("uniqueKey", uniqueKey);
         bundle.putString("user", user);
+
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -103,9 +116,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
     private void sendNotification(RemoteMessage remoteMessage) {
         PendingIntent pendingIntent;
         Uri defaultSound;
-        String user = remoteMessage.getData().get("user");
+        user = remoteMessage.getData().get("user");
+        sented = remoteMessage.getData().get("sented");
         String icon = remoteMessage.getData().get("icon");
-        String uniqueKey = remoteMessage.getData().get("uniqueKey");
+        uniqueKey = remoteMessage.getData().get("uniqueKey");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         friend_request = remoteMessage.getData().get("friend_request");
@@ -135,5 +149,25 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         }
 
         noti.notify(i, builder.build());
+
+    }
+
+    private void update() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("chats").child(uniqueKey);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chats chat = snapshot.getValue(Chats.class);
+                    HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("is_seen", "Delivered");
+                    snapshot.getRef().updateChildren(hashMap);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

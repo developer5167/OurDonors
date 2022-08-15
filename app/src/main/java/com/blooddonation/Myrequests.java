@@ -44,7 +44,6 @@ public class Myrequests extends AppCompatActivity {
 
                 for (DataSnapshot snapshot2 : snapshot.getChildren()) {
                     String s1 = String.valueOf(snapshot2.getValue());
-                    Log.e("NNNNNNNN  ", s1 + " ");
                     notications_uids.add(s1);
                 }
                 AdapterForMyRequests adapterForNotifications = new AdapterForMyRequests(Myrequests.this, notications_uids);
