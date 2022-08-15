@@ -1,0 +1,25 @@
+-- Merging decision tree log ---
+manifest
+ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:3:1-9:12
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:3:1-9:12
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:3:1-9:12
+	package
+		ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:5:5-52
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:4:5-63
+uses-sdk
+ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+	android:targetSdkVersion
+		ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:15-44
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml
+		ADDED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml:7:5-47
+		INJECTED from F:\OurDonors2\OurDonors2\slideDateTimePicker\src\main\AndroidManifest.xml

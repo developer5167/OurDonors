@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_color"
+    tools:context=".Profile">
+
+    <RelativeLayout
+        android:id="@+id/actionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/main_color">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:contentDescription="TODO"
+            android:onClick="back"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@+id/back"
+            android:fontFamily="@font/googlesans"
+            android:text="Profile"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/contact"
+                android:transitionName="profile" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/googlesans"
+            android:hint="Name"
+            android:padding="10dp"
+            android:textColor="@color/textColors"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/googlesans"
+            android:hint="Age"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textColor="@color/textColors"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bloodgrp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/googlesans"
+            android:hint="Blood Group"
+            android:inputType="textCapCharacters"
+            android:padding="10dp"
+            android:textColor="@color/textColors"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Address"
+            android:inputType="textCapCharacters"
+            android:maxLines="2"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:onClick="edit_detils"
+        tools:ignore="OnClick">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit">
+
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans"
+            android:text="Edit details"
+            android:textColor="#03A9F4"
+            android:gravity="center"
+            android:textStyle="bold">
+
+        </TextView>
+    </LinearLayout>
+
+</RelativeLayout>

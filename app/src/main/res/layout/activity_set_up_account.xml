@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SetUpAccount">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_color">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/contact" />
+
+
+                <RelativeLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignRight="@+id/profile"
+                    android:layout_alignBottom="@+id/profile"
+                    android:background="@drawable/profic_pic_back"
+                    android:onClick="profile_pic_add">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/add_profile_pic" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:hint="Name"
+                android:textColorHint="@color/textColors"
+                app:hintTextColor="@color/textColors">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_back"
+                    android:fontFamily="@font/googlesans"
+                    android:textColor="@color/textColors"
+                    android:textColorHint="@color/textColors" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="?attr/textInputOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Age"
+                android:inputType="number"
+                android:textColorHint="@color/textColors"
+                app:hintTextColor="@color/textColors">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_back"
+                    android:fontFamily="@font/googlesans"
+                    android:inputType="number"
+                    android:textColor="@color/textColors" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Select Blood Group"
+                android:textColorHint="@color/textColors"
+                app:hintTextColor="@color/textColors">
+
+                <AutoCompleteTextView
+                    android:id="@+id/bloodgrp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edit_back"
+                    android:focusable="false"
+                    android:fontFamily="@font/googlesans"
+                    android:padding="10dp"
+                    android:textColor="@color/textColors"
+                    android:textColorHint="@color/textColors"
+                    app:simpleItems="@array/bloodGroups" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/choose_back"
+                android:gravity="center"
+                android:onClick="location"
+
+                android:padding="15dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/icon1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/add_loc" />
+
+                <TextView
+                    android:id="@+id/address_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/googlesans"
+                    android:text="Select your location"
+                    android:textColor="#fff"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp">
+
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    app:buttonTint="@color/secondary_color"
+                    app:useMaterialThemeColors="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/googlesans"
+                    android:text="I Agree to accept"
+                    android:textColor="@color/textColors" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/googlesans"
+                    android:onClick="terms"
+                    android:text=" Terms and Conditions"
+                    android:textColor="@color/secondary_color" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/register"
+                style="@style/Widget.Material3.Button.ElevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="-5dp"
+                android:enabled="true"
+                android:fontFamily="@font/googlesans"
+                android:gravity="center"
+                android:onClick="register"
+                android:padding="15dp"
+                android:text="Register"
+                android:textColor="@color/main_color"
+                android:textStyle="bold"
+                app:backgroundTint="@color/secondary_color"
+                tools:ignore="OnClick" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="invisible"
+                app:hideAnimationBehavior="outward"
+                app:indicatorColor="@color/secondary_color"
+                app:showAnimationBehavior="inward" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+
+
+
+
+
+
+

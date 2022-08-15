@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_lay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_color"
+    tools:context=".AddPostActivity">
+
+    <RelativeLayout
+        android:id="@+id/options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/emoji_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/smily2" />
+
+        <ImageView
+            android:id="@+id/font_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@+id/emoji_btn"
+            android:layout_toRightOf="@+id/emoji_btn"
+            android:onClick="font_style"
+            android:src="@drawable/title" />
+
+        <ImageView
+            android:id="@+id/background_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toEndOf="@+id/font_btn"
+            android:layout_toRightOf="@+id/font_btn"
+            android:onClick="background_color"
+            android:src="@drawable/background" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <developer.semojis.Helper.EmojiconEditText
+            android:id="@+id/emojiedit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:hint="Type a status"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:textColor="@color/textColors"
+            android:textColorHint="#64FFB6B5"
+            android:textSize="50sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/sendBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        android:background="@drawable/nextarrowback"
+        android:gravity="center"
+        android:onClick="send_post">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/send_msg2" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/dimmlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D9000000"
+        android:visibility="gone" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:layout_centerInParent="true"
+        android:id="@+id/progress_bar"
+        android:visibility="gone"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/secondary_color" />
+
+</RelativeLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/left_messsage_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/right_messsage_item"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/msg_pro"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <developer.semojis.Helper.EmojiconTextView
+            android:id="@+id/show_messsage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@+id/msg_pro"
+            android:background="@drawable/left_message"
+            android:padding="10dp"
+            android:textColor="#000000"
+            emojicon:emojiconAlignment="bottom"
+            emojicon:emojiconSize="30dp" />
+
+        <TextView
+            android:id="@+id/seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/show_messsage"
+            android:layout_alignParentEnd="true"
+            android:text=""
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/image_msg_lay"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_margin="5dp"
+            android:layout_toEndOf="@+id/msg_pro"
+            android:background="@drawable/left_message"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/image_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/left_message_back">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                     />
+            </RelativeLayout>
+            <TextView
+                android:layout_margin="5dp"
+                android:id="@+id/img_seen"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/image_message" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

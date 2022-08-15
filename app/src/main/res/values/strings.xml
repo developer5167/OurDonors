@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">OurDonors</string>
+    <string name="app_name_short">OD</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="your_api_key">AIzaSyD6ZaXdWR3qmLVUvs4wC_uyk0pHSzMrOv8</string>
+    <string name="notifications">Notifications</string>
+    <string name="dialogtxt">Your account will be not activated until you set up your profile details</string>
+    <string name="settingd"><b><u>Settings</u></b></string>
+    <string name="setup">Account</string>
+    <string name="requestblood">Hello sir/Madam i\'m here to request for blood/platelets, so please helps us, Thank you</string>
+    <string name="readytodonate">Hello sir/Madam im ready to donate, Thank you</string>
+    <string name="notready">Hello sir/Madam im not ready to donate, Thank you</string>
+    <string name="requestSent">Request Sent</string>
+    <string name="USER">user</string>
+    <string-array name="bloodGroups">
+        <item>Select Blood Group</item>
+        <item>O+</item>
+        <item>O-</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+    </string-array>
+</resources>

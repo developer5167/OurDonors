@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "300478628673",
+    "project_id": "donors-19021",
+    "storage_bucket": "donors-19021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300478628673:android:93f9f85e41c02daa8317c0",
+        "android_client_info": {
+          "package_name": "com.blooddonation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300478628673-dlo27cnlvnb63jpmbiac5kise3fcca1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6ZaXdWR3qmLVUvs4wC_uyk0pHSzMrOv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300478628673-dlo27cnlvnb63jpmbiac5kise3fcca1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
