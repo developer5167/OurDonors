@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,28 +28,32 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class User_Activity extends AppCompatActivity {
-    CardView accd_lay;
-    FirebaseUser firebaseUser;
-    Dialog dialog;
+    private CardView accd_lay;
+    private FirebaseUser firebaseUser;
+    private Dialog dialog;
     boolean local = false;
-    DatabaseReference databaseReference;
-    ArrayList<MyAccountDetails> arrayList = new ArrayList<>();
-    RecyclerView searched_items_recycler;
-    AdapterForSearched adapterForSearched;
-    ProgressDialog progressDialog;
-    CardView next_lay, searchBar;
-    TextView sub_location;
-    String locality;
-    String locality2;
-    RelativeLayout loading_lay;
+    private DatabaseReference databaseReference;
+    private ArrayList<MyAccountDetails> arrayList = new ArrayList<>();
+    private RecyclerView searched_items_recycler, sub_location;
+    private AdapterForSearched adapterForSearched;
+    private AdapterForSubSearch adapterForSubSearch;
+    private ProgressDialog progressDialog;
+    private CardView next_lay, searchBar;
+    private String locality;
+    private String locality2;
+    private LinearLayout search_in;
+    private RelativeLayout loading_lay;
     private AutoCompleteTextView autoCompleteTextView;
-
+    private LatLngModel latLngModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class User_Activity extends AppCompatActivity {
         }
         accd_lay = findViewById(R.id.accd_lay);
         loading_lay = findViewById(R.id.loading_lay);
+        search_in = findViewById(R.id.search_in);
         searchBar = findViewById(R.id.searchBar);
         sub_location = findViewById(R.id.sub_location);
         next_lay = findViewById(R.id.next_lay);
@@ -66,6 +72,7 @@ public class User_Activity extends AppCompatActivity {
         autoCompleteTextView = findViewById(R.id.bloodgrp);
 
         searched_items_recycler.setLayoutManager(new LinearLayoutManager(this));
+        sub_location.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         dialog = new Dialog(User_Activity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -143,6 +150,9 @@ public class User_Activity extends AppCompatActivity {
                 }
                 adapterForSearched = new AdapterForSearched(User_Activity.this, arrayList);
                 searched_items_recycler.setAdapter(adapterForSearched);
+                search_in.setVisibility(View.VISIBLE);
+                adapterForSubSearch = new AdapterForSubSearch(User_Activity.this, getItems());
+                sub_location.setAdapter(adapterForSubSearch);
                 progressDialog.dismiss();
             }
 
@@ -152,15 +162,19 @@ public class User_Activity extends AppCompatActivity {
         });
     }
 
+    private List<String> getItems() {
+        String address = latLngModel.getAddress();
+        return Arrays.asList(address.trim().split("\\s*,\\s*"));
+    }
+
     public void setAcc(View view) {
         startActivity(new Intent(this, SetUpAccount.class));
     }
 
     public void search(View view) {
-        LatLngModel latLngModel = LatLngModel.getInstance();
+        latLngModel = LatLngModel.getInstance();
         get_loc2(latLngModel.getPinCode());
     }
-
 
     @Override
     protected void onResume() {
@@ -185,19 +199,24 @@ public class User_Activity extends AppCompatActivity {
         });
     }
 
-
-    public void subLocation(View view) {
-        if (local) {
-            sub_location.setText(locality2);
-            sub_location.setBackgroundResource(R.drawable.searchin_back2);
-            local = false;
-        } else {
-            sub_location.setText(locality);
-            sub_location.setBackgroundResource(R.drawable.searchin_back2);
-            local = true;
-        }
-    }
     public void back(View view) {
         onBackPressed();
+    }
+
+    public void searchData(String bindingAdapterPosition) {
+        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("users");
+
+        Query applesQuery = reference2.orderByChild("location").equalTo(bindingAdapterPosition);
+        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("cASCKASC   "+snapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

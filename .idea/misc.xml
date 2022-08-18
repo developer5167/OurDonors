@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/drawable/searching_back.xml" value="0.228" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/drawable/searching_back_selected.xml" value="0.228" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_home_screen.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_message.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_myrequests.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_notifications__class.xml" value="0.22135416666666666" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_user_.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/left_message_item.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/notifications_item.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/right_message_item.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/subsearch_item.xml" value="0.3546875" />
       </map>
     </option>
   </component>

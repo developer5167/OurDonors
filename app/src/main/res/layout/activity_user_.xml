@@ -15,9 +15,9 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
-            android:transitionName="search"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:transitionName="search"
             android:visibility="visible"
             app:cardBackgroundColor="@color/tabs_color"
             app:cardCornerRadius="3dp"
@@ -48,7 +48,7 @@
 
         <LinearLayout
             android:id="@+id/search_in"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/searchBar"
             android:layout_marginLeft="10dp"
@@ -59,16 +59,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Search in :" />
+                android:text="Search near :" />
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/sub_location"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/searching_back"
-                android:onClick="subLocation"
-                android:padding="10dp"
+                android:padding="3dp"
                 android:text="subLocation"
                 android:textColor="#009688" />
 
