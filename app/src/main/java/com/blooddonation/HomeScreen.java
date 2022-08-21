@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,6 +39,7 @@ public class HomeScreen extends AppCompatActivity {
     private CircleImageView profile;
     private Dialog dialog;
     private boolean your_date_is_outdated;
+    private SharedPrefManager sharedPrefManager;
 
     LatLngModel latLngModel;
 
@@ -55,14 +57,19 @@ public class HomeScreen extends AppCompatActivity {
         dialog.setContentView(R.layout.setupac);
         dialog.setCancelable(false);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        sharedPrefManager = SharedPrefManager.getInstance();
+        if (sharedPrefManager.getProfileData(HomeScreen.this) != null) {
+            MyData.setMyData(sharedPrefManager.getProfileData(HomeScreen.this));
+            Picasso.with(getApplicationContext()).load(MyData.getMyData().getImg_url()).into(profile);
+        } else {
+            setProfilePic();
+        }
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) {
                     dialog.show();
-                } else {
-                    setProfilePic();
                 }
             }
 
@@ -75,18 +82,7 @@ public class HomeScreen extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         }
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.MY_AC).child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                MyData myData = snapshot.getValue(MyData.class);
-                MyData.setMyData(myData);
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
         getLocation();
     }
 
@@ -145,14 +141,35 @@ public class HomeScreen extends AppCompatActivity {
     void setProfilePic() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference22 = FirebaseDatabase.getInstance().getReference().child("MyAc").child(firebaseUser.getUid());
+        databaseReference22.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    BloodGroup bg = snapshot.getValue(BloodGroup.class);
+                    if (bg != null) {
+                        getProfileData(bg.getBg());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    void getProfileData(String bg) {
+        DatabaseReference databaseReference22 = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(bg).child(firebaseUser.getUid());
         databaseReference22.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                    Picasso.with(getApplicationContext())
-                            .load(myAccountDetails.getImg_url())
-                            .into(profile);
+                    MyData.setMyData(snapshot.getValue(MyData.class));
+                    SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
+                    sharedPrefManager.setProfileData(HomeScreen.this, MyData.getMyData());
+                    Picasso.with(getApplicationContext()).load(MyData.getMyData().getImg_url()).into(profile);
                 }
             }
 
@@ -163,7 +180,6 @@ public class HomeScreen extends AppCompatActivity {
         });
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -172,7 +188,6 @@ public class HomeScreen extends AppCompatActivity {
 
     public void post(View view) {
         CardView my_posts, other_posts;
-
         Dialog dialog = new Dialog(this, R.style.Theme_dialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.post_dialog);
@@ -201,7 +216,7 @@ public class HomeScreen extends AppCompatActivity {
         otherStatus = new ArrayList<>();
         otherUploadedDates = new ArrayList<>();
         myStatusus = new ArrayList<>();
-        latLngModel=LatLngModel.getInstance();
+        latLngModel = LatLngModel.getInstance();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("MY_STATUS");
         DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("all_posts");
         Query applesQuery = reference.child(firebaseUser.getUid()).orderByChild("owner").equalTo(firebaseUser.getUid());
@@ -272,6 +287,7 @@ public class HomeScreen extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

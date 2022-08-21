@@ -37,6 +37,7 @@ public class Constants {
     public static final String RESTART_THE_APP_IF_YOU_WANT_THE_FEATURE = "restart the app if you want the feature";
     public static final String UPDATE_DETAILS = "Update details";
     public static final String USER_ID = "userId";
+    public static final String SHARED_PREFS = "SHARED_PREFS";
     private static APIService apiService;
 
     public static void checkLocation(Context context) {

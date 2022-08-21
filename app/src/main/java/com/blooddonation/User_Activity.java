@@ -130,15 +130,17 @@ public class User_Activity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         String blood_grp = autoCompleteTextView.getText().toString();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(locality).child(blood_grp);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(blood_grp);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayList.clear();
                 for (DataSnapshot snapshot2 : snapshot.getChildren()) {
                     MyAccountDetails pojo2 = snapshot2.getValue(MyAccountDetails.class);
-                    if (pojo2 != null && !pojo2.getMy_id().equals(firebaseUser.getUid())) {
-                        arrayList.add(pojo2);
+                    if (pojo2 != null && pojo2.getLocation().contains(locality)) {
+                        if (!pojo2.getMy_id().equals(firebaseUser.getUid())) {
+                            arrayList.add(pojo2);
+                        }
                     }
                 }
                 if (arrayList.size() == 0) {
@@ -204,19 +206,6 @@ public class User_Activity extends AppCompatActivity {
     }
 
     public void searchData(String bindingAdapterPosition) {
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("users");
-
-        Query applesQuery = reference2.orderByChild("location").equalTo(bindingAdapterPosition);
-        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("cASCKASC   "+snapshot.getValue());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        get_loc2(bindingAdapterPosition);
     }
 }

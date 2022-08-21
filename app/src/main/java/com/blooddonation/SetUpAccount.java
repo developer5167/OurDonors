@@ -1,5 +1,6 @@
 package com.blooddonation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,13 +15,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blooddonation.Notifications.Token;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -48,6 +49,7 @@ public class SetUpAccount extends AppCompatActivity {
     private String blood_grp;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 2;
     private ProgressBar progressBar;
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
     boolean picked_from_gal = false;
 
     @Override
@@ -57,7 +59,7 @@ public class SetUpAccount extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         }
-
+        launcher();
         boolean from_profile = getIntent().getBooleanExtra(Constants.FROM_PROFILE, false);
         databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS);
         databaseReferenceMyAc = FirebaseDatabase.getInstance().getReference().child(Constants.MY_AC);
@@ -115,20 +117,14 @@ public class SetUpAccount extends AppCompatActivity {
 
     public void register() {
         if (picked_from_gal) {
-            storageReference.child(new File(uri.toString()).getName()).putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        storageReference.child(new File(uri.toString()).getName()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                save_data(uri);
-                                progressBar.setVisibility(View.INVISIBLE);
-                                startActivity(new Intent(SetUpAccount.this, HomeScreen.class));
-                                finish();
-                            }
-                        });
-                    }
+            storageReference.child(new File(uri.toString()).getName()).putFile(uri).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    storageReference.child(new File(uri.toString()).getName()).getDownloadUrl().addOnSuccessListener(uri -> {
+                        save_data(uri);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        startActivity(new Intent(SetUpAccount.this, HomeScreen.class));
+                        finish();
+                    });
                 }
             });
         } else {
@@ -154,8 +150,8 @@ public class SetUpAccount extends AppCompatActivity {
         Random random = new Random();
         String id = RandomString.getAlphaNumericString(random.nextInt((100 - 20) + 1) + 20);
         LatLngModel latLngModel = LatLngModel.getInstance();
-        DatabaseReference databaseReference_ = databaseReference.child(latLngModel.getPinCode()).child(blood_grp).child(firebaseUser.getUid());
-        MyAccountDetails myAccountDetails = new MyAccountDetails();
+        DatabaseReference databaseReference_ = databaseReference.child(blood_grp).child(firebaseUser.getUid());
+        MyData myAccountDetails = new MyData();
         myAccountDetails.setAge(age.getText().toString());
         myAccountDetails.setBg(blood_grp);
         myAccountDetails.setLocation(latLngModel.getAddress());
@@ -165,10 +161,13 @@ public class SetUpAccount extends AppCompatActivity {
         myAccountDetails.setChatId(id);
         databaseReference_.setValue(myAccountDetails);
         DatabaseReference databaseReferenceMyAc_ref = databaseReferenceMyAc.child(firebaseUser.getUid());
-        databaseReferenceMyAc_ref.setValue(myAccountDetails);
+        databaseReferenceMyAc_ref.child("bg").setValue(blood_grp);
         DatabaseReference databaseReference_accout = FirebaseDatabase.getInstance().getReference().child(Constants.ACCOUNTS).child(firebaseUser.getUid());
         databaseReference_accout.setValue(firebaseUser.getUid());
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> update_token(task.getResult()));
+        MyData.setMyData(myAccountDetails);
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
+        sharedPrefManager.setProfileData(SetUpAccount.this, MyData.getMyData());
     }
 
     private void update_token(String token) {
@@ -176,6 +175,14 @@ public class SetUpAccount extends AppCompatActivity {
         Token token1 = new Token(token);
         databaseReference.child(firebaseUser.getUid()).setValue(token1);
 
+    }
+
+    private void launcher() {
+        someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                    }
+                });
     }
 
     public void terms(View view) {
@@ -186,25 +193,13 @@ public class SetUpAccount extends AppCompatActivity {
         picked_from_gal = true;
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(Constants.IMAGE);
-        startActivityForResult(intent, 300);
+        someActivityResultLauncher.launch(intent);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finishAffinity();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
     }
 
 }
