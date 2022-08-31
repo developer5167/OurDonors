@@ -122,7 +122,6 @@ public class User_Activity extends BaseActivity implements ProfileLoaded {
             }
         });
     }
-
     private List<String> getItems() {
         String address = latLngModel.getAddress();
         return Arrays.asList(address.trim().split("\\s*,\\s*"));
@@ -165,7 +164,11 @@ public class User_Activity extends BaseActivity implements ProfileLoaded {
             Intent intent = new Intent(this, DonorPreview.class);
             ActivityOptionsCompat options = ActivityOptionsCompat.
                     makeSceneTransitionAnimation(User_Activity.this, profile_pic, "profile");
-            startActivity(intent, options.toBundle());
+            if (GetProfile.getMyDetails() != null && GetProfile.getUserDetails() != null) {
+                startActivity(intent, options.toBundle());
+            } else {
+                Toast.makeText(this, "Some thing went wrong please try again", Toast.LENGTH_SHORT).show();
+            }
             progress_horizontal.setVisibility(View.INVISIBLE);
         }
     }

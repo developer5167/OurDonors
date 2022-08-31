@@ -21,6 +21,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +35,7 @@ import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     DatabaseReference databaseReference;
-    GoogleSignInButton sign_in;
+    MaterialButton sign_in;
     private int RC_SIGN_IN = 100;
     private GoogleApiClient mGoogleApiClient;
     FirebaseAuth mAuth;
@@ -120,18 +121,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onStart() {
         super.onStart();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void initialize() {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
             startActivity(new Intent(MainActivity.this, HomeScreen.class));
             return;
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void initialize() {
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
         mAuth = FirebaseAuth.getInstance();
         sign_in = findViewById(R.id.sign_in);
         sign_in.setOnClickListener(this);

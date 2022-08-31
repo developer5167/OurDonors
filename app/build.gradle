@@ -62,4 +62,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     def lottieVersion = "3.4.0"
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 }

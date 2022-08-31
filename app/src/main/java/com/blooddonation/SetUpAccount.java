@@ -90,28 +90,30 @@ public class SetUpAccount extends BaseActivity {
                 .load(uri)
                 .into(profile_pic);
         name.setText(googleName);
-
     }
 
     public void register(View view) {
-
-        blood_grp = spinner2.getText().toString();
-        if (name.getText().toString().length() != 0 && age.getText().toString().length() != 0
-                && blood_grp.length() != 0) {
-            if (accepted) {
-                progressBar.setIndeterminate(true);
-                progressBar.setVisibility(View.VISIBLE);
-                Handler handler = new Handler();
-                handler.postDelayed(this::register, 2000);
+        if (view.isEnabled()) {
+            blood_grp = spinner2.getText().toString();
+            if (name.getText().toString().length() != 0 && age.getText().toString().length() != 0
+                    && blood_grp.length() != 0) {
+                if (accepted) {
+                    view.setEnabled(false);
+                    progressBar.setIndeterminate(true);
+                    progressBar.setVisibility(View.VISIBLE);
+                    Handler handler = new Handler();
+                    handler.postDelayed(this::register, 2000);
+                } else {
+                    Toast.makeText(this, Constants.PLEASE_ACCEPT_TERMS_AND_CONDITIONS, Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, Constants.PLEASE_ACCEPT_TERMS_AND_CONDITIONS, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Constants.FIELD_S_CAN_T_BE_EMPTY, Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this, Constants.FIELD_S_CAN_T_BE_EMPTY, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void register() {
+
         if (picked_from_gal) {
             storageReference.child(new File(uri.toString()).getName()).putFile(uri).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
