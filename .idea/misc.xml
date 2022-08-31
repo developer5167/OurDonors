@@ -5,14 +5,21 @@
       <map>
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/drawable/searching_back.xml" value="0.228" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/drawable/searching_back_selected.xml" value="0.228" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_donor_preview.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_home_screen.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_message.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_myrequests.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_notifications__class.xml" value="0.22135416666666666" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_profile.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_set_up_account.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/activity_user_.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/item_for_mychats.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/item_for_searched.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/left_message_item.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/network_dialog.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/notifications_item.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/right_message_item.xml" value="0.3546875" />
+        <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/setupac.xml" value="0.3546875" />
         <entry key="..\:/AndroidProjects/OurDonors2/app/src/main/res/layout/subsearch_item.xml" value="0.3546875" />
       </map>
     </option>

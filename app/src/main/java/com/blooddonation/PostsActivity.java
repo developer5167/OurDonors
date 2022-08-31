@@ -2,10 +2,7 @@ package com.blooddonation;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,10 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,23 +24,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
-import static com.blooddonation.HomeScreen.myStatusus;
-import static com.blooddonation.HomeScreen.uploaded_dates;
 
-public class PostsActivity extends AppCompatActivity implements StoriesProgressView.StoriesListener {
+public class PostsActivity extends BaseActivity implements StoriesProgressView.StoriesListener {
     FirebaseUser firebaseUser;
     DatabaseReference databaseReference22;
-    MyAccountDetails myAccountDetails;
+    AccountDetails accountDetails;
     LinearLayout status_bar;
     private StoriesProgressView storiesProgressView;
     private ImageView image;
@@ -93,25 +84,25 @@ public class PostsActivity extends AppCompatActivity implements StoriesProgressV
         storiesProgressView = findViewById(R.id.stories);
         time = findViewById(R.id.time);
         my_profile = findViewById(R.id.my_profile);
-        storiesProgressView.setStoriesCount(myStatusus.size());
+//        storiesProgressView.setStoriesCount(myStatusus.size());
         storiesProgressView.setStoryDuration(5000L);
         storiesProgressView.setStoriesListener(this);
         image = (ImageView) findViewById(R.id.image);
 
-        if (myStatusus.size() != 0) {
-            progressBar.setVisibility(View.VISIBLE);
-            Picasso.with(this).load(myStatusus.get(counter)).into(image);
-            String time1 = uploaded_dates.get(counter);
-            String res = getFormattedDate(this, Long.parseLong(time1));
-            time.setText(res);
-            new Handler().postDelayed(() -> {
-                progressBar.setVisibility(View.GONE);
-                storiesProgressView.startStories();
-            }, 1000);
-        } else {
-            no_posts_yet.setVisibility(View.VISIBLE);
-            status_bar.setVisibility(View.GONE);
-        }
+//        if (myStatusus.size() != 0) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            Picasso.with(this).load(myStatusus.get(counter)).into(image);
+//            String time1 = uploaded_dates.get(counter);
+//            String res = getFormattedDate(this, Long.parseLong(time1));
+//            time.setText(res);
+//            new Handler().postDelayed(() -> {
+//                progressBar.setVisibility(View.GONE);
+//                storiesProgressView.startStories();
+//            }, 1000);
+//        } else {
+//            no_posts_yet.setVisibility(View.VISIBLE);
+//            status_bar.setVisibility(View.GONE);
+//        }
         View reverse = findViewById(R.id.reverse);
         reverse.setOnClickListener(v -> storiesProgressView.reverse());
         reverse.setOnTouchListener(onTouchListener);
@@ -128,9 +119,9 @@ public class PostsActivity extends AppCompatActivity implements StoriesProgressV
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    myAccountDetails = snapshot.getValue(MyAccountDetails.class);
+                    accountDetails = snapshot.getValue(AccountDetails.class);
                     Picasso.with(getApplicationContext())
-                            .load(myAccountDetails.getImg_url())
+                            .load(accountDetails.getImg_url())
                             .into(my_profile);
                 }
             }
@@ -145,20 +136,20 @@ public class PostsActivity extends AppCompatActivity implements StoriesProgressV
     @Override
     public void onNext() {
         int val = ++counter;
-        Picasso.with(this).load(myStatusus.get(val)).into(image);
-        String time1 = uploaded_dates.get(val);
-        String res = getFormattedDate(this, Long.parseLong(time1));
-        time.setText(res);
+//        Picasso.with(this).load(myStatusus.get(val)).into(image);
+//        String time1 = uploaded_dates.get(val);
+//        String res = getFormattedDate(this, Long.parseLong(time1));
+//        time.setText(res);
     }
 
     @Override
     public void onPrev() {
         if ((counter - 1) < 0) return;
         int val = --counter;
-        Picasso.with(this).load(myStatusus.get(val)).into(image);
-        String time1 = uploaded_dates.get(val);
-        String res = getFormattedDate(this, Long.parseLong(time1));
-        time.setText(res);
+//        Picasso.with(this).load(myStatusus.get(val)).into(image);
+//        String time1 = uploaded_dates.get(val);
+//        String res = getFormattedDate(this, Long.parseLong(time1));
+//        time.setText(res);
     }
 
     @Override

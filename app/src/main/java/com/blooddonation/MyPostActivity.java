@@ -1,11 +1,11 @@
 package com.blooddonation;
 
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 import android.os.Bundle;
 import android.view.View;
 
-public class MyPostActivity extends AppCompatActivity {
+public class MyPostActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

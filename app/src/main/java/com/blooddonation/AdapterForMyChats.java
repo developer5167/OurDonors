@@ -2,40 +2,39 @@ package com.blooddonation;
 
 import static com.blooddonation.Constants.getUniqueString;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.MyViewHolder> {
+public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.MyViewHolder> implements ProfileLoaded {
     private Context contex;
     private ArrayList<String> notification_uids;
-    private MyAccountDetails myAccountDetails;
+    private AccountDetails accountDetails;
+    private FirebaseUser firebaseUser;
 
     AdapterForMyChats(Context contex, ArrayList<String> notification_uids) {
         this.contex = contex;
         this.notification_uids = notification_uids;
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -47,27 +46,16 @@ public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        myAccountDetails = new MyAccountDetails();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("MyAc").child(notification_uids.get(position));
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                Glide.with(contex).load(myAccountDetails.getImg_url()).into(holder.profile_pic);
-                holder.age.setText(MessageFormat.format("Age :{0}", myAccountDetails.getAge()));
-                holder.bg.setText(MessageFormat.format("Blood Grp :{0}", myAccountDetails.getBg()));
-                holder.name.setText(myAccountDetails.getName());
-                holder.name.setText(myAccountDetails.getName());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        new GetProfile(notification_uids.get(position), this, holder.profile_pic, holder.progress_horizontal, holder);
+        new GetProfile(firebaseUser.getUid(), this, holder.profile_pic, holder.progress_horizontal, holder);
         holder.card.setOnClickListener(view -> {
-            String uniqueKey = getUniqueString(MyData.getMyData().getChatId(), myAccountDetails.getChatId());
-            contex.startActivity(new Intent(contex, MessageActivity.class)
-                    .putExtra("user", myAccountDetails.getMy_id()).putExtra("uniqueKey", uniqueKey));
+            String uniqueKey = getUniqueString(MyData.getMyData().getChatId(), accountDetails.getChatId());
+            Intent intent = new Intent(contex, MessageActivity.class);
+            intent.putExtra("uniqueKey", uniqueKey)
+                    .putExtra("user", notification_uids.get(holder.getAbsoluteAdapterPosition()));
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation((Activity) contex, holder.profile_pic, "profile");
+            contex.startActivity(intent, options.toBundle());
         });
 
     }
@@ -77,9 +65,27 @@ public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.My
         return notification_uids.size();
     }
 
+    @Override
+    public void OnProfileLoaded(AccountDetails accountDetails, String user, CircleImageView profile_pic, ProgressBar progress_horizontal, RecyclerView.ViewHolder holder) {
+        System.out.println("cdSLCSDLCL   "+firebaseUser.getUid()+"    "+user);
+
+        if (!user.equals(firebaseUser.getUid())) {
+            GetProfile.setUserDetails(accountDetails);
+            this.accountDetails = accountDetails;
+            Glide.with(contex).load(accountDetails.getImg_url()).into(((MyViewHolder) holder).profile_pic);
+            ((MyViewHolder) holder).age.setText(MessageFormat.format("Age :{0}", accountDetails.getAge()));
+            ((MyViewHolder) holder).bg.setText(MessageFormat.format("Blood Grp :{0}", accountDetails.getBg()));
+            ((MyViewHolder) holder).name.setText(accountDetails.getName());
+        }else {
+            GetProfile.setMyDetails(accountDetails);
+            System.out.println("cdSLCSDLCL   "+firebaseUser.getUid()+"    "+GetProfile.getMyDetails());
+        }
+    }
+
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, age, bg, location;
         CircleImageView profile_pic;
+        ProgressBar progress_horizontal;
         CardView card;
 
         MyViewHolder(@NonNull View itemView) {
@@ -89,6 +95,7 @@ public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.My
             bg = itemView.findViewById(R.id.bg);
             location = itemView.findViewById(R.id.location);
             profile_pic = itemView.findViewById(R.id.profile_pic);
+            progress_horizontal = itemView.findViewById(R.id.progress_horizontal);
             age = itemView.findViewById(R.id.age);
         }
     }

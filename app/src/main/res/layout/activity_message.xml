@@ -16,11 +16,11 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:onClick="back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:onClick="back"
             android:src="@drawable/back" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -31,15 +31,15 @@
             android:gravity="center"
             android:padding="5dp"
             android:src="@mipmap/ic_launcher"
-            android:transitionName="profile_pic" />
+            android:transitionName="profile" />
 
         <TextView
             android:id="@+id/user_name_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/googlesans"
             android:layout_marginLeft="10dp"
+            android:fontFamily="@font/googlesans"
             android:text="Loading..."
             android:textColor="#fff"
             android:transitionName="profile_name" />
@@ -94,17 +94,17 @@
             <developer.semojis.Helper.EmojiconEditText
                 android:id="@+id/edittext_send"
                 android:layout_width="0dp"
-                android:textColor="@color/textColors"
-                android:fontFamily="@font/googlesans"
-                android:textColorHint="@color/textColors"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:background="@drawable/edit_back"
+                android:fontFamily="@font/googlesans"
                 android:hint="Enter a message"
+
                 android:imeOptions="actionSend"
                 android:inputType="text"
                 android:padding="10dp"
+                android:textColor="@color/textColors"
+                android:textColorHint="@color/textColors"
                 emojicon:emojiconSize="28sp" />
 
             <ImageView

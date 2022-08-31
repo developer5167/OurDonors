@@ -1,41 +1,36 @@
 package com.blooddonation;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyRequests.MyViewHolder> {
+public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyRequests.MyViewHolder> implements ProfileLoaded {
     private Context contex;
     private ArrayList<String> notification_uids;
-    private MyAccountDetails myAccountDetails;
+    private AccountDetails accountDetails;
+    private FirebaseUser firebaseUser;
 
     AdapterForMyRequests(Context contex, ArrayList<String> notification_uids) {
         this.contex = contex;
         this.notification_uids = notification_uids;
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -47,22 +42,19 @@ public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyReque
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        myAccountDetails = new MyAccountDetails();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("MyAc").child(notification_uids.get(position));
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                holder.name.setText(myAccountDetails.getName());
-                holder.name.setText(myAccountDetails.getName());
-                holder.bg.setText("You Requested " + myAccountDetails.getName() + " for Blood");
-                Picasso.with(contex).load(myAccountDetails.getImg_url()).into(holder.profile_pic);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+        new GetProfile(notification_uids.get(position), this, holder.profile_pic, holder.progress_horizontal, holder);
+//        new GetProfile(firebaseUser.getUid(), this, holder.profile_pic, holder.progress_horizontal, holder);
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("MyAc").child(notification_uids.get(position));
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
 
     }
 
@@ -71,10 +63,21 @@ public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyReque
         return notification_uids.size();
     }
 
+    @Override
+    public void OnProfileLoaded(AccountDetails accountDetails, String user, CircleImageView profile_pic, ProgressBar progress_horizontal, RecyclerView.ViewHolder holder) {
+        if (!user.equals(firebaseUser.getUid())){
+            ((MyViewHolder)holder).name.setText(accountDetails.getName());
+            ((MyViewHolder)holder).name.setText(accountDetails.getName());
+            ((MyViewHolder)holder).bg.setText(MessageFormat.format("You Requested {0} for Blood", accountDetails.getName()));
+            Picasso.with(contex).load(accountDetails.getImg_url()).into(((MyViewHolder)holder).profile_pic);
+        }
+    }
+
     static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView name, age, bg, location;
         CircleImageView profile_pic;
         CardView card;
+        ProgressBar progress_horizontal;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +86,7 @@ public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyReque
             bg = itemView.findViewById(R.id.bg);
             location = itemView.findViewById(R.id.location);
             profile_pic = itemView.findViewById(R.id.profile_pic);
+            progress_horizontal = itemView.findViewById(R.id.progress_horizontal);
         }
     }
 }

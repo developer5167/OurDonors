@@ -15,12 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 import com.blooddonation.Notifications.Token;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +35,7 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SetUpAccount extends AppCompatActivity {
+public class SetUpAccount extends BaseActivity {
     private EditText name, age;
     private boolean accepted = false;
     private Uri uri;
@@ -162,8 +160,8 @@ public class SetUpAccount extends AppCompatActivity {
         databaseReference_.setValue(myAccountDetails);
         DatabaseReference databaseReferenceMyAc_ref = databaseReferenceMyAc.child(firebaseUser.getUid());
         databaseReferenceMyAc_ref.child("bg").setValue(blood_grp);
-        DatabaseReference databaseReference_accout = FirebaseDatabase.getInstance().getReference().child(Constants.ACCOUNTS).child(firebaseUser.getUid());
-        databaseReference_accout.setValue(firebaseUser.getUid());
+        DatabaseReference databaseReferenceAct = FirebaseDatabase.getInstance().getReference().child(Constants.ACCOUNTS).child(firebaseUser.getUid());
+        databaseReferenceAct.setValue(firebaseUser.getUid());
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> update_token(task.getResult()));
         MyData.setMyData(myAccountDetails);
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance();
@@ -179,10 +177,10 @@ public class SetUpAccount extends AppCompatActivity {
 
     private void launcher() {
         someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                    }
-                });
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Intent data = result.getData();
+            }
+        });
     }
 
     public void terms(View view) {

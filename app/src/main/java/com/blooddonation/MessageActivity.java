@@ -10,14 +10,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +30,7 @@ import java.util.List;
 import developer.semojis.Helper.EmojiconEditText;
 import developer.semojis.actions.EmojIconActions;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends BaseActivity {
     private RecyclerView chat_recyclerView;
     private ImageView user_image_message;
     private EmojiconEditText editText;
@@ -41,7 +39,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private FirebaseUser firebaseUser;
     private String user;
-    private MyAccountDetails myAccountDetails_myAc;
+    private AccountDetails myAccountDetails_Ac;
     private List<Chats> messags = new ArrayList<>();
     ;
     private MessageAdapter messageAdapter;
@@ -74,51 +72,13 @@ public class MessageActivity extends AppCompatActivity {
         linearLayoutManager.setStackFromEnd(true);
         chat_recyclerView.setLayoutManager(linearLayoutManager);
         chat_recyclerView.setHasFixedSize(true);
-
-
         messageAdapter = new MessageAdapter(messags, MessageActivity.this);
         chat_recyclerView.setAdapter(messageAdapter);
-
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("MyAc").child(user);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                MyAccountDetails myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                Picasso.with(getApplicationContext()).load(myAccountDetails.getImg_url()).into(user_image_message);
-                user_name_message.setText(myAccountDetails.getName());
-                DatabaseReference myAc = FirebaseDatabase.getInstance().getReference().child("MyAc").child(firebaseUser.getUid());
-                myAc.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        databaseReferenceUnique = FirebaseDatabase.getInstance().getReference().child("chats").child(uniqueKey);
-                        readmessages(user);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-
-        DatabaseReference databaseReference_myac = FirebaseDatabase.getInstance().getReference().child("MyAc").child(firebaseUser.getUid());
-        databaseReference_myac.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myAccountDetails_myAc = snapshot.getValue(MyAccountDetails.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
+        Picasso.with(getApplicationContext()).load(GetProfile.getUserDetails().getImg_url()).into(user_image_message);
+        user_name_message.setText(GetProfile.getUserDetails().getName());
+        myAccountDetails_Ac =GetProfile.getMyDetails();
+        user=GetProfile.getUserDetails().getMy_id();
+        readmessages(user);
         DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("chatpage").child(user).child(firebaseUser.getUid());
         reference2.addValueEventListener(new ValueEventListener() {
             @Override
@@ -245,7 +205,7 @@ public class MessageActivity extends AppCompatActivity {
             databaseReference.child("chats").child(uniqueKey).push().setValue(hashMap);
             editText.setText("");
             if (!user1.equals(user2)) {
-                send_notification(this, user, myAccountDetails_myAc.getName(), mesg, firebaseUser.getUid(), uniqueKey);
+                send_notification(this, user, myAccountDetails_Ac.getName(), mesg, firebaseUser.getUid(), uniqueKey);
             }
         }
     }

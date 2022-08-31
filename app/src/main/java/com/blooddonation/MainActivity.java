@@ -10,7 +10,7 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 import com.blooddonation.Address.LocationTrack;
 import com.google.android.gms.auth.api.Auth;
@@ -32,7 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     DatabaseReference databaseReference;
     GoogleSignInButton sign_in;
     private int RC_SIGN_IN = 100;

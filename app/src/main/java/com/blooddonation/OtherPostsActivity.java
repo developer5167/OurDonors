@@ -1,12 +1,8 @@
 package com.blooddonation;
 
-import static com.blooddonation.HomeScreen.otherStatus;
-import static com.blooddonation.HomeScreen.otherUploadedDates;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,10 +29,10 @@ import java.util.Calendar;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.shts.android.storiesprogressview.StoriesProgressView;
 
-public class OtherPostsActivity extends AppCompatActivity implements StoriesProgressView.StoriesListener {
+public class OtherPostsActivity extends BaseActivity implements StoriesProgressView.StoriesListener {
     FirebaseUser firebaseUser;
     DatabaseReference databaseReference22;
-    MyAccountDetails myAccountDetails;
+    AccountDetails accountDetails;
     LinearLayout status_bar;
     private StoriesProgressView storiesProgressView;
     private ImageView image;
@@ -74,25 +70,25 @@ public class OtherPostsActivity extends AppCompatActivity implements StoriesProg
         storiesProgressView = findViewById(R.id.stories);
         time = findViewById(R.id.time);
         my_profile = findViewById(R.id.my_profile);
-        storiesProgressView.setStoriesCount(otherStatus.size());
+//        storiesProgressView.setStoriesCount(otherStatus.size());
         storiesProgressView.setStoryDuration(5000L);
         storiesProgressView.setStoriesListener(this);
         image = (ImageView) findViewById(R.id.image);
 
-        if (otherStatus.size() != 0) {
-            progressBar.setVisibility(View.VISIBLE);
-            Picasso.with(this).load(otherStatus.get(counter)).into(image);
-            String time1 = otherUploadedDates.get(counter);
-            String res = getFormattedDate(Long.parseLong(time1));
-            time.setText(res);
-            new Handler().postDelayed(() -> {
-                progressBar.setVisibility(View.GONE);
-                storiesProgressView.startStories();
-            }, 1000);
-        } else {
-            no_posts_yet.setVisibility(View.VISIBLE);
-            status_bar.setVisibility(View.GONE);
-        }
+//        if (otherStatus.size() != 0) {
+//            progressBar.setVisibility(View.VISIBLE);
+//            Picasso.with(this).load(otherStatus.get(counter)).into(image);
+//            String time1 = otherUploadedDates.get(counter);
+//            String res = getFormattedDate(Long.parseLong(time1));
+//            time.setText(res);
+//            new Handler().postDelayed(() -> {
+//                progressBar.setVisibility(View.GONE);
+//                storiesProgressView.startStories();
+//            }, 1000);
+//        } else {
+//            no_posts_yet.setVisibility(View.VISIBLE);
+//            status_bar.setVisibility(View.GONE);
+//        }
         View reverse = findViewById(R.id.reverse);
         reverse.setOnClickListener(v -> storiesProgressView.reverse());
         reverse.setOnTouchListener(onTouchListener);
@@ -109,9 +105,9 @@ public class OtherPostsActivity extends AppCompatActivity implements StoriesProg
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    myAccountDetails = snapshot.getValue(MyAccountDetails.class);
+                    accountDetails = snapshot.getValue(AccountDetails.class);
                     Picasso.with(getApplicationContext())
-                            .load(myAccountDetails.getImg_url())
+                            .load(accountDetails.getImg_url())
                             .into(my_profile);
                 }
             }
@@ -126,20 +122,20 @@ public class OtherPostsActivity extends AppCompatActivity implements StoriesProg
     @Override
     public void onNext() {
         int val = ++counter;
-        Picasso.with(this).load(otherStatus.get(val)).into(image);
-        String time1 = otherUploadedDates.get(val);
-        String res = getFormattedDate(Long.parseLong(time1));
-        time.setText(res);
+//        Picasso.with(this).load(otherStatus.get(val)).into(image);
+//        String time1 = otherUploadedDates.get(val);
+//        String res = getFormattedDate(Long.parseLong(time1));
+//        time.setText(res);
     }
 
     @Override
     public void onPrev() {
         if ((counter - 1) < 0) return;
         int val = --counter;
-        Picasso.with(this).load(otherStatus.get(val)).into(image);
-        String time1 = otherUploadedDates.get(val);
-        String res = getFormattedDate(Long.parseLong(time1));
-        time.setText(res);
+//        Picasso.with(this).load(otherStatus.get(val)).into(image);
+//        String time1 = otherUploadedDates.get(val);
+//        String res = getFormattedDate(Long.parseLong(time1));
+//        time.setText(res);
     }
 
     @Override

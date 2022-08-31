@@ -3,7 +3,7 @@ package com.rahuljanagouda.statusstories;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.BaseActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,7 +21,7 @@ import com.rahuljanagouda.statusstories.glideProgressBar.ProgressTarget;
 
 import java.util.Locale;
 
-public class StatusStoriesActivity extends AppCompatActivity implements StoryStatusView.UserInteractionListener {
+public class StatusStoriesActivity extends BaseActivity implements StoryStatusView.UserInteractionListener {
 
     public static final String STATUS_RESOURCES_KEY = "statusStoriesResources";
     public static final String STATUS_DURATION_KEY = "statusStoriesDuration";

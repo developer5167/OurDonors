@@ -1,7 +1,7 @@
 package com.blooddonation;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class Myrequests extends AppCompatActivity {
+public class Myrequests extends BaseActivity {
     RecyclerView myrequest_recycler;
     FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;

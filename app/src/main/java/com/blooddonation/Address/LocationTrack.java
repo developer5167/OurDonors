@@ -34,8 +34,8 @@ public class LocationTrack extends Service implements LocationListener {
     boolean canGetLocation = false;
 
     Location loc;
-    double latitude;
-    double longitude;
+    double latitude=0;
+    double longitude=0;
 
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;

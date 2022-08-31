@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 
@@ -22,20 +22,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class HomeScreen extends AppCompatActivity {
+public class HomeScreen extends BaseActivity {
     private FirebaseUser firebaseUser;
-    private MyAccountDetails myAccountDetails;
+    private AccountDetails accountDetails;
     private CircleImageView profile;
     private Dialog dialog;
     private boolean your_date_is_outdated;
@@ -104,7 +101,7 @@ public class HomeScreen extends AppCompatActivity {
     public void myprofile(View view) {
         Intent intent = new Intent(this, Profile.class);
         ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(HomeScreen.this, profile, "profile");
+                makeSceneTransitionAnimation(this, profile, "profile");
         startActivity(intent, options.toBundle());
     }
 
@@ -201,109 +198,109 @@ public class HomeScreen extends AppCompatActivity {
         dialog.show();
     }
 
-    String key;
+//    String key;
 
-    public static ArrayList<String> myStatusus;
-    public static ArrayList<String> uploaded_dates;
+//    public static ArrayList<String> myStatusus;
+//    public static ArrayList<String> uploaded_dates;
 
-    public static ArrayList<String> otherStatus;
-    public static ArrayList<String> otherUploadedDates;
+//    public static ArrayList<String> otherStatus;
+//    public static ArrayList<String> otherUploadedDates;
 
     @Override
     protected void onResume() {
         super.onResume();
-        uploaded_dates = new ArrayList<>();
-        otherStatus = new ArrayList<>();
-        otherUploadedDates = new ArrayList<>();
-        myStatusus = new ArrayList<>();
-        latLngModel = LatLngModel.getInstance();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("MY_STATUS");
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("all_posts");
-        Query applesQuery = reference.child(firebaseUser.getUid()).orderByChild("owner").equalTo(firebaseUser.getUid());
-        Query all_posts = reference2.child(latLngModel.getPinCode()).child(firebaseUser.getUid()).orderByChild("owner").equalTo(firebaseUser.getUid());
-        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                        key = appleSnapshot.getKey();
-                        if (isOutDated(key)) {
-                            FirebaseDatabase.getInstance().getReference().child("MY_STATUS").child(firebaseUser.getUid()).child(key).removeValue();
-                        } else {
-                            FirebaseDatabase.getInstance().getReference().child("MY_STATUS").child(firebaseUser.getUid())
-                                    .child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            Story story = snapshot.getValue(Story.class);
-                                            uploaded_dates.add(story.getCurrent());
-                                            myStatusus.add(story.getPostUrl());
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-        all_posts.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                        key = appleSnapshot.getKey();
-                        if (isOutDated(key)) {
-                            FirebaseDatabase.getInstance().getReference().child("all_posts").child(latLngModel.getPinCode()).child(firebaseUser.getUid())
-                                    .child(key).removeValue();
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-        get_allPosts();
+//        uploaded_dates = new ArrayList<>();
+//        otherStatus = new ArrayList<>();
+//        otherUploadedDates = new ArrayList<>();
+//        myStatusus = new ArrayList<>();
+//        latLngModel = LatLngModel.getInstance();
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("MY_STATUS");
+//        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("all_posts");
+//        Query applesQuery = reference.child(firebaseUser.getUid()).orderByChild("owner").equalTo(firebaseUser.getUid());
+//        Query all_posts = reference2.child(latLngModel.getPinCode()).child(firebaseUser.getUid()).orderByChild("owner").equalTo(firebaseUser.getUid());
+//        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+//                        key = appleSnapshot.getKey();
+//                        if (isOutDated(key)) {
+//                            FirebaseDatabase.getInstance().getReference().child("MY_STATUS").child(firebaseUser.getUid()).child(key).removeValue();
+//                        } else {
+//                            FirebaseDatabase.getInstance().getReference().child("MY_STATUS").child(firebaseUser.getUid())
+//                                    .child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                            Story story = snapshot.getValue(Story.class);
+//                                            uploaded_dates.add(story.getCurrent());
+//                                            myStatusus.add(story.getPostUrl());
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError error) {
+//                                        }
+//                                    });
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
+//        all_posts.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+//                        key = appleSnapshot.getKey();
+//                        if (isOutDated(key)) {
+//                            FirebaseDatabase.getInstance().getReference().child("all_posts").child(latLngModel.getPinCode()).child(firebaseUser.getUid())
+//                                    .child(key).removeValue();
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//            }
+//        });
+//        get_allPosts();
     }
 
-    private void get_allPosts() {
-        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("all_posts");
-        reference2.child(latLngModel.getPinCode()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot s : snapshot.getChildren()) {
-                    Story story = s.getValue(Story.class);
-                    String owner = story.getOwner();
-                    if (!owner.equals(firebaseUser.getUid())) {
-                        otherUploadedDates.add(story.getCurrent());
-                        otherStatus.add(story.getPostUrl());
-                    }
-                }
-            }
+//    private void get_allPosts() {
+//        DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference().child("all_posts");
+//        reference2.child(latLngModel.getPinCode()).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot s : snapshot.getChildren()) {
+//                    Story story = s.getValue(Story.class);
+//                    String owner = story.getOwner();
+//                    if (!owner.equals(firebaseUser.getUid())) {
+//                        otherUploadedDates.add(story.getCurrent());
+//                        otherStatus.add(story.getPostUrl());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private boolean isOutDated(String key) {
-
-        Long date_from_server = Long.valueOf(key);
-        Long latest_date = System.currentTimeMillis();
-        if (date_from_server.compareTo(latest_date) > 0) {
-            your_date_is_outdated = false;
-        } else if (date_from_server.compareTo(latest_date) < 0) {
-            your_date_is_outdated = true;
-        }
-        return your_date_is_outdated;
-    }
+//    private boolean isOutDated(String key) {
+//
+//        Long date_from_server = Long.valueOf(key);
+//        Long latest_date = System.currentTimeMillis();
+//        if (date_from_server.compareTo(latest_date) > 0) {
+//            your_date_is_outdated = false;
+//        } else if (date_from_server.compareTo(latest_date) < 0) {
+//            your_date_is_outdated = true;
+//        }
+//        return your_date_is_outdated;
+//    }
 }

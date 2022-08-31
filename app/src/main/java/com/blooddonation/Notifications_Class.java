@@ -4,7 +4,7 @@ import static com.blooddonation.Constants.getUniqueString;
 import static com.blooddonation.Constants.send_notification;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,17 +25,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Notifications_Class extends AppCompatActivity {
+public class Notifications_Class extends BaseActivity {
 
     CircleImageView profile_pic;
     TextView name, age, location, bg;
     private String user_id;
     DatabaseReference databaseReference, databaseReference2;
-    MyAccountDetails myAccountDetails;
+    AccountDetails accountDetails;
     boolean from_useractivity;
     ArrayList<String> notications_uids = new ArrayList<>();
     FirebaseUser firebaseUser;
@@ -69,11 +68,11 @@ public class Notifications_Class extends AppCompatActivity {
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                    name.setText(myAccountDetails.getName());
-                    age.setText("Age :" + myAccountDetails.getAge());
+                    accountDetails = snapshot.getValue(AccountDetails.class);
+                    name.setText(accountDetails.getName());
+                    age.setText("Age :" + accountDetails.getAge());
                     Picasso.with(getApplicationContext())
-                            .load(myAccountDetails.getImg_url())
+                            .load(accountDetails.getImg_url())
                             .into(profile_pic);
 
                 }

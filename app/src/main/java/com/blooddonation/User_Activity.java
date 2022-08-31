@@ -12,13 +12,14 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +29,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -36,13 +36,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class User_Activity extends AppCompatActivity {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class User_Activity extends BaseActivity implements ProfileLoaded {
     private CardView accd_lay;
     private FirebaseUser firebaseUser;
     private Dialog dialog;
     boolean local = false;
     private DatabaseReference databaseReference;
-    private ArrayList<MyAccountDetails> arrayList = new ArrayList<>();
+    private ArrayList<AccountDetails> arrayList = new ArrayList<>();
     private RecyclerView searched_items_recycler, sub_location;
     private AdapterForSearched adapterForSearched;
     private AdapterForSubSearch adapterForSubSearch;
@@ -74,31 +76,31 @@ public class User_Activity extends AppCompatActivity {
         searched_items_recycler.setLayoutManager(new LinearLayoutManager(this));
         sub_location.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        dialog = new Dialog(User_Activity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(R.layout.setupac);
-        dialog.setCancelable(false);
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    accd_lay.setVisibility(View.GONE);
-                    loading_lay.setVisibility(View.GONE);
-                } else {
-                    accd_lay.setVisibility(View.VISIBLE);
-                    loading_lay.setVisibility(View.GONE);
-                    dialog.show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        dialog.findViewById(R.id.setbtn).setOnClickListener(view -> startActivity(new Intent(User_Activity.this, SetUpAccount.class)));
+//        dialog = new Dialog(User_Activity.this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(R.layout.setupac);
+//        dialog.setCancelable(false);
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    accd_lay.setVisibility(View.GONE);
+//                    loading_lay.setVisibility(View.GONE);
+//                } else {
+//                    accd_lay.setVisibility(View.VISIBLE);
+//                    loading_lay.setVisibility(View.GONE);
+//                    dialog.show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//        dialog.findViewById(R.id.setbtn).setOnClickListener(view -> startActivity(new Intent(User_Activity.this, SetUpAccount.class)));
     }
 
     @Override
@@ -136,7 +138,7 @@ public class User_Activity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 arrayList.clear();
                 for (DataSnapshot snapshot2 : snapshot.getChildren()) {
-                    MyAccountDetails pojo2 = snapshot2.getValue(MyAccountDetails.class);
+                    AccountDetails pojo2 = snapshot2.getValue(AccountDetails.class);
                     if (pojo2 != null && pojo2.getLocation().contains(locality)) {
                         if (!pojo2.getMy_id().equals(firebaseUser.getUid())) {
                             arrayList.add(pojo2);
@@ -181,24 +183,24 @@ public class User_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    accd_lay.setVisibility(View.GONE);
-                    loading_lay.setVisibility(View.GONE);
-                } else {
-                    accd_lay.setVisibility(View.VISIBLE);
-                    loading_lay.setVisibility(View.GONE);
-                    dialog.show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    accd_lay.setVisibility(View.GONE);
+//                    loading_lay.setVisibility(View.GONE);
+//                } else {
+//                    accd_lay.setVisibility(View.VISIBLE);
+//                    loading_lay.setVisibility(View.GONE);
+//                    dialog.show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
     }
 
     public void back(View view) {
@@ -207,5 +209,25 @@ public class User_Activity extends AppCompatActivity {
 
     public void searchData(String bindingAdapterPosition) {
         get_loc2(bindingAdapterPosition);
+    }
+
+    public void setData(String user, CircleImageView profile_pic, ProgressBar progress_horizontal) {
+        new GetProfile(user, this, profile_pic, progress_horizontal, null);
+        new GetProfile(firebaseUser.getUid(), this, profile_pic, progress_horizontal, null);
+
+    }
+
+    @Override
+    public void OnProfileLoaded(AccountDetails accountDetails, String user, CircleImageView profile_pic, ProgressBar progress_horizontal, RecyclerView.ViewHolder holder) {
+        if (user.equals(firebaseUser.getUid())) {
+            GetProfile.setMyDetails(accountDetails);
+        } else {
+            GetProfile.setUserDetails(accountDetails);
+            Intent intent = new Intent(this, DonorPreview.class);
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(User_Activity.this, profile_pic, "profile");
+            startActivity(intent, options.toBundle());
+            progress_horizontal.setVisibility(View.INVISIBLE);
+        }
     }
 }

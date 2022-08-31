@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
@@ -51,7 +50,7 @@ import developer.semojis.Helper.EmojiconEditText;
 import developer.semojis.actions.EmojIconActions;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class AddPostActivity extends AppCompatActivity {
+public class AddPostActivity extends BaseActivity {
     public static String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/ourdonors";
 
     RelativeLayout root_view, root_lay, options;

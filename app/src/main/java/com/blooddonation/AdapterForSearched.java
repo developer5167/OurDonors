@@ -1,12 +1,10 @@
 package com.blooddonation;
 
 import android.content.Context;
-import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,20 +15,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 
 public class AdapterForSearched extends RecyclerView.Adapter<AdapterForSearched.MyViewHolder> {
     private Context contex;
     private FirebaseUser firebaseUser;
-    private ArrayList<MyAccountDetails> pojo2s;
+    private ArrayList<AccountDetails> pojo2s;
+    private int selectedProfile = -1;
 
-    AdapterForSearched(Context contex, ArrayList<MyAccountDetails> pojo2s) {
+    AdapterForSearched(Context contex, ArrayList<AccountDetails> pojo2s) {
         this.contex = contex;
         this.pojo2s = pojo2s;
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -45,14 +42,22 @@ public class AdapterForSearched extends RecyclerView.Adapter<AdapterForSearched.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        holder.name.setText("Name :" + pojo2s.get(position).getName());
-        holder.age.setText("Age :" + pojo2s.get(position).getAge());
-        holder.bg.setText("Blood Group :" + pojo2s.get(position).getBg());
-        Picasso.with(contex)
-                .load(pojo2s.get(position).getImg_url())
-                .into(holder.profile_pic);
-        holder.card.setOnClickListener(view -> contex.startActivity(new Intent(contex, DonorPreview.class)
-                .putExtra("user", pojo2s.get(holder.getAbsoluteAdapterPosition()).getMy_id())));
+        holder.name.setText(MessageFormat.format("Name :{0}", pojo2s.get(position).getName()));
+        holder.age.setText(MessageFormat.format("Age :{0}", pojo2s.get(position).getAge()));
+        holder.bg.setText(MessageFormat.format("Blood Group :{0}", pojo2s.get(position).getBg()));
+        Picasso.with(contex).load(pojo2s.get(position).getImg_url()).into(holder.profile_pic);
+        holder.card.setOnClickListener(view -> {
+            holder.progress_horizontal.setVisibility(View.VISIBLE);
+            ((User_Activity)contex).setData(
+                    pojo2s.get(holder.getAbsoluteAdapterPosition()).getMy_id()
+                    ,holder.profile_pic
+            ,holder.progress_horizontal);
+            holder.progress_horizontal.setIndeterminate(true);
+            selectedProfile = holder.getAbsoluteAdapterPosition();
+        });
+
+
+
     }
 
     @Override
@@ -64,11 +69,13 @@ public class AdapterForSearched extends RecyclerView.Adapter<AdapterForSearched.
         TextView name, age, bg, location;
         CircleImageView profile_pic;
         CardView card;
+        ProgressBar progress_horizontal;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             card = itemView.findViewById(R.id.card);
+            progress_horizontal = itemView.findViewById(R.id.progress_horizontal);
             age = itemView.findViewById(R.id.age);
             bg = itemView.findViewById(R.id.bg);
             location = itemView.findViewById(R.id.location);

@@ -1,18 +1,21 @@
 package com.blooddonation;
 
-import android.Manifest;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.transition.Fade;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.blooddonation.Address.LocationAddressManager;
 import com.blooddonation.Address.LocationTrack;
@@ -28,66 +31,49 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-;
-
-public class EntryScreen extends BaseActivity {
-    private final int REQUEST_LOCATION = 100;
+public class BaseActivity extends AppCompatActivity {
     private static Retrofit retrofit;
+    private Dialog dialog;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    private BroadcastReceiver checkNetWorkConnection = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (checkNetWork()) {
+                dismissDialog();
+                getAddress();
+            } else {
+                showDialog();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        permissions();
+        dialog = new Dialog(this, R.style.full_screen_dialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.network_dialog);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(checkNetWorkConnection, intentFilter);
+
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void permissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    android.Manifest.permission.RECORD_AUDIO,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, REQUEST_LOCATION);
-        } else {
-            getAddress();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION) {
-            if (grantResults[4] != PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-                Toast.makeText(EntryScreen.this, "Please grant permissions " + ("\ud83d\ude01"), Toast.LENGTH_LONG).show();
-                finishAffinity();
-            } else {
-                getAddress();
-            }
-        }
-
+    private boolean checkNetWork() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
     private void getAddress() {
         double longitude = 0;
         double latitude = 0;
-        LocationTrack locationTrack = new LocationTrack(EntryScreen.this);
+        LocationTrack locationTrack = new LocationTrack(BaseActivity.this);
         try {
             locationTrack.getLocation();
             if (locationTrack.canGetLocation()) {
@@ -102,10 +88,24 @@ public class EntryScreen extends BaseActivity {
                 locationTrack.showSettingsAlert();
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Please allow location permissions to access the app", Toast.LENGTH_SHORT).show();
+            Toast.makeText(BaseActivity.this, "Please allow location permissions to access the app", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(checkNetWorkConnection);
+    }
+
+    private void showDialog() {
+        dialog.show();
+    }
+
+    private void dismissDialog() {
+        dialog.dismiss();
     }
 
     void fetchLocation(double latitude, double longitude) {
@@ -121,17 +121,15 @@ public class EntryScreen extends BaseActivity {
                     LocationAddressManager.setLocationAddressManager(response.body());
                     latLngModel.setAddress(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress());
                     latLngModel.setPinCode(extractDigits(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress()));
-                    startActivity(new Intent(EntryScreen.this, MainActivity.class));
-                    finish();
                 } else {
-                    Toast.makeText(EntryScreen.this, "response  " + response.errorBody(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(BaseActivity.this, "response  " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<LocationAddressManager> call, @NonNull Throwable t) {
                 System.out.println("DCPDSPPC    " + t.getMessage());
-                Toast.makeText(EntryScreen.this, "response>>>>>>>  " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BaseActivity.this, "response>>>>>>>  " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -161,5 +159,4 @@ public class EntryScreen extends BaseActivity {
         }
 
     }
-
 }

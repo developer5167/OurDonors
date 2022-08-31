@@ -12,62 +12,79 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_pic"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center"
-            android:padding="5dp"
-            android:src="@drawable/contact" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/googlesans"
-                android:text="loading..."
-                android:textColor="@color/textColors"
-                android:textSize="20sp">
-
-            </TextView>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/contact"
+                android:transitionName="profile" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/bg"
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:fontFamily="@font/googlesans"
                     android:text="loading..."
                     android:textColor="@color/textColors"
-                    android:visibility="visible">
+                    android:textSize="20sp">
 
                 </TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/googlesans"
+                        android:text="loading..."
+                        android:textColor="@color/textColors"
+                        android:visibility="visible">
+
+                    </TextView>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="name"
+                    android:visibility="gone">
+
+                </TextView>
+
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="name"
-                android:visibility="gone">
-
-            </TextView>
-
         </LinearLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+
+            app:hideAnimationBehavior="outward"
+            app:indicatorColor="@color/secondary_color"
+            app:showAnimationBehavior="inward" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

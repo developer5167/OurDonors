@@ -3,9 +3,9 @@ package com.blooddonation;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+;
 
-public class TermsConditions extends AppCompatActivity {
+public class TermsConditions extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

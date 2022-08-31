@@ -14,13 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.blooddonation.Notifications.Client;
 import com.blooddonation.Notifications.Data;
@@ -37,21 +35,18 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DonorPreview extends AppCompatActivity {
+public class DonorPreview extends BaseActivity  {
     CircleImageView profile_dono;
     DatabaseReference databaseReference, databaseReference2;
     TextView name, requestblood_txt;
     FirebaseUser firebaseUser;
-    MyAccountDetails myAccountDetails, myAccountDetails1;
+    AccountDetails selectedUserDetails, currentUserDetails;
     APIService apiService;
-    ImageView requestblood_img;
 
     String user, chatId;
     static Dialog dialog;
@@ -70,55 +65,34 @@ public class DonorPreview extends AppCompatActivity {
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         user = getIntent().getStringExtra(getString(R.string.USER));
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("MyAc").child(user);
-        databaseReference2 = FirebaseDatabase.getInstance().getReference().child("MyAc").child(firebaseUser.getUid());
         profile_dono = findViewById(R.id.profile_dono);
-
-        requestblood_img = findViewById(R.id.requestblood_img);
         requestblood_txt = findViewById(R.id.requestblood_txt);
         name = findViewById(R.id.name_donorP);
         manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                myAccountDetails = snapshot.getValue(MyAccountDetails.class);
-                Picasso.with(getApplicationContext())
-                        .load(myAccountDetails.getImg_url())
-                        .into(profile_dono);
-                name.setText(myAccountDetails.getName());
-                databaseReference2.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        myAccountDetails1 = snapshot.getValue(MyAccountDetails.class);
-                        uniqueKey = getUniqueString(myAccountDetails1.getChatId(), myAccountDetails.getChatId());
+        selectedUserDetails=GetProfile.getUserDetails();
+        currentUserDetails=GetProfile.getMyDetails();
+        Picasso.with(getApplicationContext()).load(selectedUserDetails.getImg_url()).into(profile_dono);
+        name.setText(selectedUserDetails.getName());
+        uniqueKey = getUniqueString(currentUserDetails.getChatId(), selectedUserDetails.getChatId());
+    }
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void request_blood(View view) {
 
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference().child(Constants.TOKENS);
-        Query query = tokens.orderByKey().equalTo(myAccountDetails.getMy_id());
+        Query query = tokens.orderByKey().equalTo(selectedUserDetails.getMy_id());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Token token = dataSnapshot1.getValue(Token.class);
-                    Data data2 = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, myAccountDetails1.getName() + " requested for blood", "Blood required", myAccountDetails.getMy_id(), "true",uniqueKey);
+                    Data data2 = new Data(firebaseUser.getUid(), R.mipmap.ic_launcher, currentUserDetails.getName() + " requested for blood", "Blood required", selectedUserDetails.getMy_id(), "true", uniqueKey);
                     Sender sender = null;
                     if (token != null) {
                         sender = new Sender(data2, token.getToken());
@@ -127,13 +101,13 @@ public class DonorPreview extends AppCompatActivity {
                             public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
                                 if (response.code() == 200) {
                                     if (response.body() != null && response.body().success == 1) {
-                                        requestblood_img.setImageResource(R.drawable.requestsent);
+                                        requestblood_txt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.requestsent, 0, 0, 0);
                                         requestblood_txt.setText(R.string.requestSent);
-                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(myAccountDetails.getMy_id()).child(firebaseUser.getUid());
+                                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(selectedUserDetails.getMy_id()).child(firebaseUser.getUid());
                                         databaseReference.setValue(firebaseUser.getUid());
                                         Toast.makeText(DonorPreview.this, "Request sent", Toast.LENGTH_SHORT).show();
-                                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("My_requests").child(firebaseUser.getUid()).child(myAccountDetails.getMy_id());
-                                        databaseReference1.setValue(myAccountDetails.getMy_id());
+                                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference().child("My_requests").child(firebaseUser.getUid()).child(selectedUserDetails.getMy_id());
+                                        databaseReference1.setValue(selectedUserDetails.getMy_id());
                                         startActivity(new Intent(DonorPreview.this, MessageActivity.class)
                                                 .putExtra("uniqueKey", uniqueKey).putExtra("user", user));
                                         finish();
@@ -180,15 +154,14 @@ public class DonorPreview extends AppCompatActivity {
         reject = dialog.findViewById(R.id.hangup);
         name_of_recipient = dialog.findViewById(R.id.name_of_recipient);
         profile_pic_recipient = dialog.findViewById(R.id.profile_pic_recipient);
-        name_of_recipient.setText("Calling " + myAccountDetails.getName() + "...");
+        name_of_recipient.setText("Calling " + selectedUserDetails.getName() + "...");
         Picasso.with(getApplicationContext())
-                .load(myAccountDetails.getImg_url())
+                .load(selectedUserDetails.getImg_url())
                 .into(profile_pic_recipient);
-        reject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
+        reject.setOnClickListener(view -> {
         });
         dialog.show();
     }
+
+
 }

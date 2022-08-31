@@ -1,7 +1,5 @@
 package com.blooddonation.Notifications;
 
-import static com.blooddonation.Constants.getUniqueString;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,12 +10,15 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.blooddonation.Chats;
+import com.blooddonation.GetProfile;
+import com.blooddonation.AccountDetails;
+import com.blooddonation.ProfileLoaded;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,25 +29,26 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.blooddonation.MessageActivity;
-import com.blooddonation.Notifications_Class;
 
 import java.util.HashMap;
 
-public class MyFirebaseMessaging extends FirebaseMessagingService {
-    String friend_request, uniqueKey, user, sented;
-    FirebaseUser firebaseUser;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MyFirebaseMessaging extends FirebaseMessagingService implements ProfileLoaded {
+   private String  uniqueKey;
+    private String user;
+    private FirebaseUser firebaseUser;
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
         String sented = remoteMessage.getData().get("sented");
         String user = remoteMessage.getData().get("user");
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         String currentUser = preferences.getString("currentuser", "none");
-
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        new GetProfile(user, this, null, null, null);
+        new GetProfile(firebaseUser.getUid(), this, null, null, null);
         if (firebaseUser != null && sented.equals(firebaseUser.getUid())) {
             if (!currentUser.equals(user)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -80,14 +82,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         PendingIntent pendingIntent;
         Uri defaultSound;
         user = remoteMessage.getData().get("user");
-        sented = remoteMessage.getData().get("sented");
-
         String icon = remoteMessage.getData().get("icon");
         uniqueKey = remoteMessage.getData().get("uniqueKey");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        friend_request = remoteMessage.getData().get("friend_request");
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent;
         Bundle bundle = new Bundle();
@@ -104,10 +102,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         Notification.Builder builder = oreoNotification.getOreoNotification(title, body, pendingIntent,
                 defaultSound, icon);
 
-        int i = 0;
-        if (j > 0) {
-            i = j;
-        }
+        int i = Math.max(j, 0);
 
         oreoNotification.getManager().notify(i, builder.build());
 
@@ -117,13 +112,10 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
         PendingIntent pendingIntent;
         Uri defaultSound;
         user = remoteMessage.getData().get("user");
-        sented = remoteMessage.getData().get("sented");
         String icon = remoteMessage.getData().get("icon");
         uniqueKey = remoteMessage.getData().get("uniqueKey");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        friend_request = remoteMessage.getData().get("friend_request");
-        RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent;
         Bundle bundle = new Bundle();
@@ -158,7 +150,6 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chats chat = snapshot.getValue(Chats.class);
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("is_seen", "Delivered");
                     snapshot.getRef().updateChildren(hashMap);
@@ -169,5 +160,14 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    @Override
+    public void OnProfileLoaded(AccountDetails accountDetails, String user, CircleImageView profile_pic, ProgressBar progress_horizontal, RecyclerView.ViewHolder holder) {
+        if (user.equals(firebaseUser.getUid())) {
+            GetProfile.setMyDetails(accountDetails);
+        } else {
+            GetProfile.setUserDetails(accountDetails);
+        }
     }
 }

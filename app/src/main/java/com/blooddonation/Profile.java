@@ -1,7 +1,7 @@
 package com.blooddonation;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+;
 
 import android.content.Intent;
 import android.os.Build;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Profile extends AppCompatActivity {
+public class Profile extends BaseActivity {
     DatabaseReference databaseReference;
     FirebaseUser firebaseUser;
     CircleImageView profile;

@@ -1,6 +1,6 @@
 package com.blooddonation;
 
-public class MyAccountDetails {
+public class AccountDetails {
     private String name;
     private String age;
     private String bg;
@@ -17,10 +17,10 @@ public class MyAccountDetails {
         this.chatId = chatId;
     }
 
-    public MyAccountDetails() {
+    public AccountDetails() {
     }
 
-    public MyAccountDetails(String name, String age, String bg, String location, String img_url, String my_id) {
+    public AccountDetails(String name, String age, String bg, String location, String img_url, String my_id) {
         this.name = name;
         this.age = age;
         this.bg = bg;

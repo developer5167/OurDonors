@@ -25,7 +25,8 @@
                 android:id="@+id/profile_dono"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/contact" />
+                android:src="@drawable/contact"
+                android:transitionName="profile" />
 
             <TextView
                 android:id="@+id/name_donorP"
@@ -152,45 +153,35 @@
                     android:textColor="#009688" />
             </LinearLayout>
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/tabs_color"
                 android:layout_gravity="end"
                 android:layout_weight="1"
-                android:background="@drawable/register_back3"
+                android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:onClick="request_blood"
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/requestblood_txt"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center">
+                    android:gravity="center"
 
-                    <ImageView
-                        android:id="@+id/requestblood_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:src="@drawable/send_msg"
-                        android:text="Request" />
-
-
-                </LinearLayout>
-
-                <TextView
-
-                    android:id="@+id/requestblood_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/googlesans"
+                    android:padding="10dp"
                     android:text="Request Blood / Platelets/ Plasma"
-                    android:textColor="@color/textColors" />
-            </LinearLayout>
+                    app:drawableTopCompat="@drawable/send_msg"
+                    app:fontFamily="@font/googlesans" />
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
