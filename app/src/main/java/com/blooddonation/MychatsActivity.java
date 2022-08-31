@@ -1,14 +1,11 @@
 package com.blooddonation;
 
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
-;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,28 +17,27 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+
 public class MychatsActivity extends BaseActivity {
     RecyclerView recyclerView;
     FirebaseUser firebaseUser;
     private DatabaseReference databaseReference;
-    ArrayList<String> mychat_list = new ArrayList<>();
+    ArrayList<String> arrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mychats);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         initialise();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot2 : snapshot.getChildren()) {
                     String s1 = String.valueOf(snapshot2.getValue());
-                    mychat_list.add(s1);
+                    arrayList.add(s1);
                 }
-                AdapterForMyChats adapterForNotifications = new AdapterForMyChats(MychatsActivity.this, mychat_list);
+                AdapterForMyChats adapterForNotifications = new AdapterForMyChats(MychatsActivity.this, arrayList);
                 recyclerView.setAdapter(adapterForNotifications);
             }
 

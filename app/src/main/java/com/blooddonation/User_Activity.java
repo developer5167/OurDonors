@@ -1,23 +1,16 @@
 package com.blooddonation;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,26 +27,19 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class User_Activity extends BaseActivity implements ProfileLoaded {
-    private CardView accd_lay;
     private FirebaseUser firebaseUser;
-    private Dialog dialog;
-    boolean local = false;
-    private DatabaseReference databaseReference;
-    private ArrayList<AccountDetails> arrayList = new ArrayList<>();
+    private final ArrayList<AccountDetails> arrayList = new ArrayList<>();
     private RecyclerView searched_items_recycler, sub_location;
     private AdapterForSearched adapterForSearched;
     private AdapterForSubSearch adapterForSubSearch;
     private ProgressDialog progressDialog;
     private CardView next_lay, searchBar;
-    private String locality;
-    private String locality2;
     private LinearLayout search_in;
-    private RelativeLayout loading_lay;
     private AutoCompleteTextView autoCompleteTextView;
     private LatLngModel latLngModel;
 
@@ -61,46 +47,17 @@ public class User_Activity extends BaseActivity implements ProfileLoaded {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
-        accd_lay = findViewById(R.id.accd_lay);
-        loading_lay = findViewById(R.id.loading_lay);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         search_in = findViewById(R.id.search_in);
         searchBar = findViewById(R.id.searchBar);
         sub_location = findViewById(R.id.sub_location);
         next_lay = findViewById(R.id.next_lay);
         searched_items_recycler = findViewById(R.id.searched_items_recycler);
         autoCompleteTextView = findViewById(R.id.bloodgrp);
-
         searched_items_recycler.setLayoutManager(new LinearLayoutManager(this));
         sub_location.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        dialog = new Dialog(User_Activity.this);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(R.layout.setupac);
-//        dialog.setCancelable(false);
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    accd_lay.setVisibility(View.GONE);
-//                    loading_lay.setVisibility(View.GONE);
-//                } else {
-//                    accd_lay.setVisibility(View.VISIBLE);
-//                    loading_lay.setVisibility(View.GONE);
-//                    dialog.show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//        dialog.findViewById(R.id.setbtn).setOnClickListener(view -> startActivity(new Intent(User_Activity.this, SetUpAccount.class)));
+
     }
 
     @Override
@@ -132,7 +89,7 @@ public class User_Activity extends BaseActivity implements ProfileLoaded {
         progressDialog.setCancelable(false);
         progressDialog.show();
         String blood_grp = autoCompleteTextView.getText().toString();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(blood_grp);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS).child(blood_grp);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -183,24 +140,6 @@ public class User_Activity extends BaseActivity implements ProfileLoaded {
     @Override
     protected void onResume() {
         super.onResume();
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("accounts").child(firebaseUser.getUid());
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.exists()) {
-//                    accd_lay.setVisibility(View.GONE);
-//                    loading_lay.setVisibility(View.GONE);
-//                } else {
-//                    accd_lay.setVisibility(View.VISIBLE);
-//                    loading_lay.setVisibility(View.GONE);
-//                    dialog.show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
     }
 
     public void back(View view) {

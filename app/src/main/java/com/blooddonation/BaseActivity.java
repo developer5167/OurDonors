@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.transition.Fade;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -62,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(checkNetWorkConnection, intentFilter);
-
+        dialog.findViewById(R.id.close).setOnClickListener(v -> finishAffinity());
     }
 
     private boolean checkNetWork() {
@@ -80,8 +79,8 @@ public class BaseActivity extends AppCompatActivity {
                 longitude = locationTrack.getLongitude();
                 latitude = locationTrack.getLatitude();
                 if (longitude != 0 && latitude != 0) {
-                    fetchLocation(latitude, longitude);
-                }else {
+                    fetchLocationDetails(latitude, longitude);
+                } else {
                     Toast.makeText(getApplicationContext(), "failed to fetch location please try again later", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -108,7 +107,7 @@ public class BaseActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
-    void fetchLocation(double latitude, double longitude) {
+    void fetchLocationDetails(double latitude, double longitude) {
         LatLngModel latLngModel = LatLngModel.getInstance();
         ApiClient apiClient = getRetrofit().create(ApiClient.class);
         latLngModel.setLatitude(latitude);
@@ -121,15 +120,11 @@ public class BaseActivity extends AppCompatActivity {
                     LocationAddressManager.setLocationAddressManager(response.body());
                     latLngModel.setAddress(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress());
                     latLngModel.setPinCode(extractDigits(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress()));
-                } else {
-                    Toast.makeText(BaseActivity.this, "response  " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<LocationAddressManager> call, @NonNull Throwable t) {
-                System.out.println("DCPDSPPC    " + t.getMessage());
-                Toast.makeText(BaseActivity.this, "response>>>>>>>  " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -28,8 +28,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-;
-
 public class EntryScreen extends BaseActivity {
     private final int REQUEST_LOCATION = 100;
     private static Retrofit retrofit;
@@ -94,7 +92,7 @@ public class EntryScreen extends BaseActivity {
                 longitude = locationTrack.getLongitude();
                 latitude = locationTrack.getLatitude();
                 if (longitude != 0 && latitude != 0) {
-                    fetchLocation(latitude, longitude);
+                    fetchLocationDetailsEntry(latitude, longitude);
                 }else {
                     Toast.makeText(getApplicationContext(), "failed to fetch location please try again later", Toast.LENGTH_SHORT).show();
                 }
@@ -108,7 +106,7 @@ public class EntryScreen extends BaseActivity {
 
     }
 
-    void fetchLocation(double latitude, double longitude) {
+    void fetchLocationDetailsEntry(double latitude, double longitude) {
         LatLngModel latLngModel = LatLngModel.getInstance();
         ApiClient apiClient = getRetrofit().create(ApiClient.class);
         latLngModel.setLatitude(latitude);
@@ -123,15 +121,10 @@ public class EntryScreen extends BaseActivity {
                     latLngModel.setPinCode(extractDigits(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress()));
                     startActivity(new Intent(EntryScreen.this, MainActivity.class));
                     finish();
-                } else {
-                    Toast.makeText(EntryScreen.this, "response  " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<LocationAddressManager> call, @NonNull Throwable t) {
-                System.out.println("DCPDSPPC    " + t.getMessage());
-                Toast.makeText(EntryScreen.this, "response>>>>>>>  " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

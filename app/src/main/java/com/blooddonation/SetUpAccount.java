@@ -54,9 +54,7 @@ public class SetUpAccount extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up_account);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         launcher();
         boolean from_profile = getIntent().getBooleanExtra(Constants.FROM_PROFILE, false);
         databaseReference = FirebaseDatabase.getInstance().getReference().child(Constants.USERS);

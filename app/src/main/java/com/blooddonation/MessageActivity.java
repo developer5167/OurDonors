@@ -54,9 +54,7 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         chat_recyclerView = findViewById(R.id.chatting_recyclerview);
         user_image_message = findViewById(R.id.user_image_message);
         editText = findViewById(R.id.edittext_send);

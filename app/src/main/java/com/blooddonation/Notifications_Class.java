@@ -46,9 +46,7 @@ public class Notifications_Class extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications__class);
         profile_pic = findViewById(R.id.profile_pic);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         notifications_list_recyclerView = findViewById(R.id.notifications_list_recyclerView);
         notifications_list_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         notifications_list_recyclerView.setHasFixedSize(true);

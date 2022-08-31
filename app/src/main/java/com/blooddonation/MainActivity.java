@@ -48,9 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         initialize();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
     }
 
     ProgressDialog progressDialog;

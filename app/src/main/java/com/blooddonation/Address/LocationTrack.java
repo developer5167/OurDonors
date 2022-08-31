@@ -1,6 +1,7 @@
 package com.blooddonation.Address;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -34,8 +35,8 @@ public class LocationTrack extends Service implements LocationListener {
     boolean canGetLocation = false;
 
     Location loc;
-    double latitude=0;
-    double longitude=0;
+    double latitude = 0;
+    double longitude = 0;
 
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
@@ -112,6 +113,7 @@ public class LocationTrack extends Service implements LocationListener {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
+                ((Activity) mContext).finishAffinity();
             }
         });
 
@@ -119,6 +121,8 @@ public class LocationTrack extends Service implements LocationListener {
         alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                ((Activity) mContext).finishAffinity();
+
             }
         });
 

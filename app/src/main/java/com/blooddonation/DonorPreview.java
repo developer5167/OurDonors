@@ -59,9 +59,7 @@ public class DonorPreview extends BaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_preview);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         user = getIntent().getStringExtra(getString(R.string.USER));
