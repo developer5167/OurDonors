@@ -118,12 +118,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initialize() {
         databaseReference = FirebaseDatabase.getInstance().getReference();

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.GetProfile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
@@ -27,7 +29,7 @@ public class AdapterForMyRequests extends RecyclerView.Adapter<AdapterForMyReque
     private AccountDetails accountDetails;
     private FirebaseUser firebaseUser;
 
-    AdapterForMyRequests(Context contex, ArrayList<String> notification_uids) {
+    public AdapterForMyRequests(Context contex, ArrayList<String> notification_uids) {
         this.contex = contex;
         this.notification_uids = notification_uids;
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();

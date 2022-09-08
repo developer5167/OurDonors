@@ -12,10 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blooddonation.Address.LocationAddressManager;
 import com.blooddonation.Address.LocationTrack;
+import com.blooddonation.Models.LatLngModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,19 +44,15 @@ public class EntryScreen extends BaseActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void permissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED  &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_PHONE_STATE,
-                    android.Manifest.permission.RECORD_AUDIO,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, REQUEST_LOCATION);
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(EntryScreen.this, new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
         } else {
             getAddress();
         }
@@ -66,7 +64,7 @@ public class EntryScreen extends BaseActivity {
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_LOCATION) {
-            if (grantResults[4] != PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[3] != PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -92,7 +90,7 @@ public class EntryScreen extends BaseActivity {
                 latitude = locationTrack.getLatitude();
                 if (longitude != 0 && latitude != 0) {
                     fetchLocationDetailsEntry(latitude, longitude);
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "failed to fetch location please try again later", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -110,7 +108,8 @@ public class EntryScreen extends BaseActivity {
         ApiClient apiClient = getRetrofit().create(ApiClient.class);
         latLngModel.setLatitude(latitude);
         latLngModel.setLongitude(longitude);
-        Call<LocationAddressManager> responseCall = apiClient.getLoaction(latitude + "," + longitude, "AIzaSyDov9RDe4mqEZngeYztb2XFMUvov6eXOcM");
+        String API_KEY = "AIzaSyDov9RDe4mqEZngeYztb2XFMUvov6eXOcM";
+        Call<LocationAddressManager> responseCall = apiClient.getLoaction(latitude + "," + longitude, API_KEY);
         responseCall.enqueue(new Callback<LocationAddressManager>() {
             @Override
             public void onResponse(@NonNull Call<LocationAddressManager> call, @NonNull Response<LocationAddressManager> response) {
@@ -122,6 +121,7 @@ public class EntryScreen extends BaseActivity {
                     finish();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<LocationAddressManager> call, @NonNull Throwable t) {
             }

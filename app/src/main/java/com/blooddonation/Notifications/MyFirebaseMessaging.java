@@ -16,8 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blooddonation.GetProfile;
-import com.blooddonation.AccountDetails;
+import com.blooddonation.Models.GetProfile;
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.Token;
 import com.blooddonation.ProfileLoaded;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

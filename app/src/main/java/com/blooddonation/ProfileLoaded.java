@@ -4,6 +4,8 @@ import android.widget.ProgressBar;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blooddonation.Models.AccountDetails;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public interface ProfileLoaded {

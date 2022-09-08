@@ -9,7 +9,6 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +19,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.GetProfile;
 import com.blooddonation.Notifications.Client;
-import com.blooddonation.Notifications.Data;
-import com.blooddonation.Notifications.MyResponse;
-import com.blooddonation.Notifications.Sender;
-import com.blooddonation.Notifications.Token;
+import com.blooddonation.Models.Data;
+import com.blooddonation.Models.MyResponse;
+import com.blooddonation.Models.Sender;
+import com.blooddonation.Models.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -69,7 +70,7 @@ public class DonorPreview extends BaseActivity  {
         manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-        selectedUserDetails=GetProfile.getUserDetails();
+        selectedUserDetails= GetProfile.getUserDetails();
         currentUserDetails=GetProfile.getMyDetails();
         Picasso.with(getApplicationContext()).load(selectedUserDetails.getImg_url()).into(profile_dono);
         name.setText(selectedUserDetails.getName());

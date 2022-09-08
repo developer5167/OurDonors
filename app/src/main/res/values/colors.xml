@@ -7,6 +7,5 @@
     <color name="secondary_color">#3ddc84</color>
     <color name="main_color">#242529</color>
     <color name="tabs_color">#2E2E38</color>
-    <color name="transparent">#00000000</color>
     <color name="white">#fff</color>
 </resources>

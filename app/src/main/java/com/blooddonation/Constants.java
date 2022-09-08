@@ -6,10 +6,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.blooddonation.Notifications.Client;
-import com.blooddonation.Notifications.Data;
-import com.blooddonation.Notifications.MyResponse;
-import com.blooddonation.Notifications.Sender;
-import com.blooddonation.Notifications.Token;
+import com.blooddonation.Models.Data;
+import com.blooddonation.Models.MyResponse;
+import com.blooddonation.Models.Sender;
+import com.blooddonation.Models.Token;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +38,7 @@ public class Constants {
     public static final String UPDATE_DETAILS = "Update details";
     public static final String USER_ID = "userId";
     public static final String SHARED_PREFS = "SHARED_PREFS";
+    public static final String API = "API";
     private static APIService apiService;
 
     public static void checkLocation(Context context) {

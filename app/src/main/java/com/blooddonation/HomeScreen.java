@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.BloodGroup;
+import com.blooddonation.Models.LatLngModel;
+import com.blooddonation.Models.MyData;
+import com.blooddonation.Models.Myrequests;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,9 +80,7 @@ public class HomeScreen extends BaseActivity {
             }
         });
         dialog.findViewById(R.id.setbtn).setOnClickListener(view -> startActivity(new Intent(HomeScreen.this, SetUpAccount.class)));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
 
         getLocation();
     }
@@ -125,6 +127,7 @@ public class HomeScreen extends BaseActivity {
             if (item.getItemId() == R.id.logout) {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(HomeScreen.this, MainActivity.class));
+                finish();
             }
             return true;
         });
@@ -142,10 +145,9 @@ public class HomeScreen extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
-                    BloodGroup bg = snapshot.getValue(BloodGroup.class);
-                    if (bg != null) {
-                        getProfileData(bg.getBg());
-                    }
+                    BloodGroup bloodGroup = snapshot.getValue(BloodGroup.class);
+                    if (bloodGroup != null)
+                        getProfileData(bloodGroup.getBg());
                 }
 
             }

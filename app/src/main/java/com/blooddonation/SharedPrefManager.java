@@ -3,6 +3,7 @@ package com.blooddonation;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.blooddonation.Models.MyData;
 import com.google.gson.Gson;
 
     public class SharedPrefManager {

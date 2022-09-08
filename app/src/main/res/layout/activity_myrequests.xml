@@ -6,7 +6,7 @@
     android:background="@color/main_color"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Myrequests">
+    tools:context=".Models.Myrequests">
 
     <RelativeLayout
         android:id="@+id/actionBar"

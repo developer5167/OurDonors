@@ -1,8 +1,8 @@
 package com.blooddonation;
 
 
-import com.blooddonation.Notifications.MyResponse;
-import com.blooddonation.Notifications.Sender;
+import com.blooddonation.Models.MyResponse;
+import com.blooddonation.Models.Sender;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

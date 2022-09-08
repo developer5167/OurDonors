@@ -16,6 +16,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.GetProfile;
+import com.blooddonation.Models.MyData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

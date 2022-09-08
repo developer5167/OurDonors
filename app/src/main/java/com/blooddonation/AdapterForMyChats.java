@@ -5,6 +5,7 @@ import static com.blooddonation.Constants.getUniqueString;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blooddonation.Models.AccountDetails;
+import com.blooddonation.Models.GetProfile;
+import com.blooddonation.Models.MyData;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.MyViewHolder> implements ProfileLoaded {
     private Context contex;
     private ArrayList<String> notification_uids;
-    private AccountDetails accountDetails;
+    private ArrayList<AccountDetails> chatIdsList = new ArrayList<>();
     private FirebaseUser firebaseUser;
 
     AdapterForMyChats(Context contex, ArrayList<String> notification_uids) {
@@ -49,13 +53,19 @@ public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.My
         new GetProfile(notification_uids.get(position), this, holder.profile_pic, holder.progress_horizontal, holder);
         new GetProfile(firebaseUser.getUid(), this, holder.profile_pic, holder.progress_horizontal, holder);
         holder.card.setOnClickListener(view -> {
-            String uniqueKey = getUniqueString(MyData.getMyData().getChatId(), accountDetails.getChatId());
+            holder.progress_horizontal.setVisibility(View.VISIBLE);
+            holder.progress_horizontal.setIndeterminate(true);
             Intent intent = new Intent(contex, MessageActivity.class);
-            intent.putExtra("uniqueKey", uniqueKey)
-                    .putExtra("user", notification_uids.get(holder.getAbsoluteAdapterPosition()));
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation((Activity) contex, holder.profile_pic, "profile");
-            contex.startActivity(intent, options.toBundle());
+            GetProfile.setUserDetails(chatIdsList.get(holder.getBindingAdapterPosition()));
+            String uniqueKey = getUniqueString(MyData.getMyData().getChatId(), chatIdsList.get(holder.getBindingAdapterPosition()).getChatId());
+            intent.putExtra("uniqueKey", uniqueKey).putExtra("user", chatIdsList.get(holder.getBindingAdapterPosition()).getMy_id());
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) contex, holder.profile_pic, "profile");
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                holder.progress_horizontal.setVisibility(View.INVISIBLE);
+                contex.startActivity(intent, options.toBundle());
+            }, 1000);
+
         });
 
     }
@@ -67,18 +77,14 @@ public class AdapterForMyChats extends RecyclerView.Adapter<AdapterForMyChats.My
 
     @Override
     public void OnProfileLoaded(AccountDetails accountDetails, String user, CircleImageView profile_pic, ProgressBar progress_horizontal, RecyclerView.ViewHolder holder) {
-        System.out.println("cdSLCSDLCL   "+firebaseUser.getUid()+"    "+user);
-
         if (!user.equals(firebaseUser.getUid())) {
-            GetProfile.setUserDetails(accountDetails);
-            this.accountDetails = accountDetails;
+            chatIdsList.add(accountDetails);
             Glide.with(contex).load(accountDetails.getImg_url()).into(((MyViewHolder) holder).profile_pic);
             ((MyViewHolder) holder).age.setText(MessageFormat.format("Age :{0}", accountDetails.getAge()));
             ((MyViewHolder) holder).bg.setText(MessageFormat.format("Blood Grp :{0}", accountDetails.getBg()));
             ((MyViewHolder) holder).name.setText(accountDetails.getName());
-        }else {
+        } else {
             GetProfile.setMyDetails(accountDetails);
-            System.out.println("cdSLCSDLCL   "+firebaseUser.getUid()+"    "+GetProfile.getMyDetails());
         }
     }
 

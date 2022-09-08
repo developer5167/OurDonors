@@ -1,6 +1,6 @@
 package com.blooddonation;
 
-import static com.blooddonation.App.CHANNEL_ID;
+import static com.blooddonation.Models.App.CHANNEL_ID;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -18,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -27,6 +26,7 @@ import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.blooddonation.Models.LatLngModel;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +44,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 import developer.semojis.Helper.EmojiconEditText;
 import developer.semojis.actions.EmojIconActions;
