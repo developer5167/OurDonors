@@ -36,7 +36,7 @@ import java.util.HashMap;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService implements ProfileLoaded {
-   private String  uniqueKey;
+    private String uniqueKey;
     private String user;
     private FirebaseUser firebaseUser;
 
@@ -96,7 +96,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService implements Pro
 
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent = PendingIntent.getActivity(this, j, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT);
         defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         OreoNotification oreoNotification = new OreoNotification(this);

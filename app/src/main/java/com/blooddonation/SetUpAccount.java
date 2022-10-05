@@ -64,6 +64,7 @@ public class SetUpAccount extends BaseActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         String googleName = null;
+        uri = Uri.parse("");
         if (firebaseUser != null) {
             googleName = firebaseUser.getDisplayName();
             uri = firebaseUser.getPhotoUrl();
@@ -114,7 +115,6 @@ public class SetUpAccount extends BaseActivity {
     }
 
     public void register() {
-
         if (picked_from_gal) {
             storageReference.child(new File(uri.toString()).getName()).putFile(uri).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -146,6 +146,9 @@ public class SetUpAccount extends BaseActivity {
     }
 
     private void save_data(Uri uri) {
+        if (uri == null) {
+            uri = Uri.parse("");
+        }
         Random random = new Random();
         String id = RandomString.getAlphaNumericString(random.nextInt((100 - 20) + 1) + 20);
         LatLngModel latLngModel = LatLngModel.getInstance();

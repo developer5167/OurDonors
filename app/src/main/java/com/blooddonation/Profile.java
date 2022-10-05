@@ -39,9 +39,9 @@ public class Profile extends BaseActivity {
         name.setText("Name :" + myData.getName());
         age.setText("Age :" + myData.getAge());
         bloodgrp.setText("Blood Group :" + myData.getBg());
-        Picasso.with(getApplicationContext())
-                .load(myData.getImg_url())
-                .into(profile);
+            Picasso.with(getApplicationContext())
+                    .load(myData.getImg_url())
+                    .into(profile);
     }
 
     public void edit_detils(View view) {

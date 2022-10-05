@@ -1,5 +1,10 @@
 package com.blooddonation;
 
+import static com.blooddonation.Constants.ENCRYPTED_KEY_1;
+import static com.blooddonation.Constants.ENCRYPTED_KEY_2;
+import static com.blooddonation.Constants.ENCRYPTED_KEY_3;
+import static com.blooddonation.Constants.BASE_URL;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -42,7 +47,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BaseActivity extends AppCompatActivity {
     private static Retrofit retrofit;
     private Dialog dialog;
-    private final int REQUEST_LOCATION = 100;
 
     private BroadcastReceiver checkNetWorkConnection = new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -73,6 +77,7 @@ public class BaseActivity extends AppCompatActivity {
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         registerReceiver(checkNetWorkConnection, intentFilter);
         dialog.findViewById(R.id.close).setOnClickListener(v -> finishAffinity());
+
     }
 
     private boolean checkNetWork() {
@@ -80,7 +85,7 @@ public class BaseActivity extends AppCompatActivity {
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    private void getAddress() {
+    public void getAddress(boolean fromEntryScreen) {
         double longitude = 0;
         double latitude = 0;
         LocationTrack locationTrack = new LocationTrack(BaseActivity.this);
@@ -90,7 +95,7 @@ public class BaseActivity extends AppCompatActivity {
                 longitude = locationTrack.getLongitude();
                 latitude = locationTrack.getLatitude();
                 if (longitude != 0 && latitude != 0) {
-                    fetchLocationDetails(latitude, longitude);
+                    fetchLocationDetails(latitude, longitude,fromEntryScreen);
                 } else {
                     Toast.makeText(getApplicationContext(), "failed to fetch location please try again later", Toast.LENGTH_SHORT).show();
                 }
@@ -118,12 +123,12 @@ public class BaseActivity extends AppCompatActivity {
         dialog.dismiss();
     }
 
-    void fetchLocationDetails(double latitude, double longitude) {
+    void fetchLocationDetails(double latitude, double longitude,boolean fromEntryScreen) {
         LatLngModel latLngModel = LatLngModel.getInstance();
         ApiClient apiClient = getRetrofit().create(ApiClient.class);
         latLngModel.setLatitude(latitude);
         latLngModel.setLongitude(longitude);
-        Call<LocationAddressManager> responseCall = apiClient.getLoaction(latitude + "," + longitude, "AIzaSyDov9RDe4mqEZngeYztb2XFMUvov6eXOcM");
+        Call<LocationAddressManager> responseCall = apiClient.getLoaction(latitude + "," + longitude, String.format("%s%s%s", ENCRYPTED_KEY_1, ENCRYPTED_KEY_2, ENCRYPTED_KEY_3));
         responseCall.enqueue(new Callback<LocationAddressManager>() {
             @Override
             public void onResponse(@NonNull Call<LocationAddressManager> call, @NonNull Response<LocationAddressManager> response) {
@@ -131,6 +136,10 @@ public class BaseActivity extends AppCompatActivity {
                     LocationAddressManager.setLocationAddressManager(response.body());
                     latLngModel.setAddress(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress());
                     latLngModel.setPinCode(extractDigits(LocationAddressManager.getLocationAddressManager().getResults().get(1).getFormattedAddress()));
+                    if (fromEntryScreen){
+                        startActivity(new Intent(BaseActivity.this, MainActivity.class));
+                        finish();
+                    }
                 }
             }
 
@@ -156,53 +165,13 @@ public class BaseActivity extends AppCompatActivity {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-            String BASE_URL = "https://maps.googleapis.com/";
-            return retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+            return retrofit = new Retrofit.Builder().baseUrl(BASE_URL).client(client).addConverterFactory(GsonConverterFactory.create()).build();
         }
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void permissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(BaseActivity.this,
-                    new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },
-                    REQUEST_LOCATION);
-        } else {
-            getAddress();
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION) {
-            if (grantResults.length > 0 && grantResults[3] != PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-                Toast.makeText(BaseActivity.this, "Please grant permissions " + ("\ud83d\ude01"), Toast.LENGTH_LONG).show();
-                finishAffinity();
-            } else {
-                getAddress();
-            }
-        }
-
+    public boolean permissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }

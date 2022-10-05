@@ -39,6 +39,11 @@ public class Constants {
     public static final String USER_ID = "userId";
     public static final String SHARED_PREFS = "SHARED_PREFS";
     public static final String API = "API";
+    public static final String ENCRYPTED_KEY_1 = "AIzaSyCuu2hiMq";
+    public static final String ENCRYPTED_KEY_2 = "mqkMZFMNHtos_";
+    public static final String ENCRYPTED_KEY_3 = "8btIDx8usrSA";
+    public static final String BASE_URL = "https://maps.googleapis.com/";
+
     private static APIService apiService;
 
     public static void checkLocation(Context context) {
@@ -69,7 +74,7 @@ public class Constants {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Token token = dataSnapshot1.getValue(Token.class);
-                    Data data = new Data(uid, R.mipmap.ic_launcher, msg, user, user_id, "false",uniqueKey);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, msg, user, user_id, "false", uniqueKey);
                     Sender sender = null;
                     if (token != null) {
                         sender = new Sender(data, token.getToken());

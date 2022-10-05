@@ -17,11 +17,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
-        applicationId "com.blooddonation"
+        applicationId "com.sam.ourdonors.blooddonation"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.3"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,7 +29,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            debuggable true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -40,8 +39,6 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
-
-
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
