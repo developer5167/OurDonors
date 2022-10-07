@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 android {
-    signingConfigs {
-        release {
-            storeFile file('D:\\AndroidProjects\\AndroidProjects\\OurDonors2\\key\\key.jks')
-            storePassword 'sam5167'
-            keyAlias 'key0'
-            keyPassword 'sam5167'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('D:\\AndroidProjects\\AndroidProjects\\OurDonors2\\key\\key.jks')
+//            storePassword 'sam5167'
+//            keyAlias 'key0'
+//            keyPassword 'sam5167'
+//        }
+//    }
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 33
 
@@ -29,7 +29,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
