@@ -34,9 +34,6 @@ jobs:
         run: chmod +x gradlew
       - name: Build debug APK
         run:  ./gradlew assemble --info
-  signAAB:
-    runs-on: ubuntu-latest
-    steps:
       - name: Sign AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
@@ -46,13 +43,31 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
-  UploadAAB:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Upload AAB
-        id: uploadArtifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app
-          path: app/build/outputs/apk/release
+#      - name: Upload AAB
+#        id: uploadArtifact
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: app
+#          path: app/build/outputs/apk/release
+
+
+
+
+
+
+
+#      - name: Sign AAB
+#        id: sign
+#        uses: r0adkll/sign-android-release@v1
+#        with:
+#          releaseDirectory: app/futuregen
+#          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+#          alias: ${{ secrets.ALIAS }}
+#          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+#          keyPassword: ${{ secrets.KEY_PASSWORD }}
+#      - name: Upload AAB
+#        id: uploadArtifact
+#        uses: actions/upload-artifact@v1
+#        with:
+#          name: app
+#          path: E:/kapilgurutrainer/app/futuregen/release/app-release.aab
