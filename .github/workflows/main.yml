@@ -37,7 +37,6 @@ jobs:
   signAAB:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - name: Sign AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
