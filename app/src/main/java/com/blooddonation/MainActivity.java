@@ -153,8 +153,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initialize() {
-        emailFiled = findViewById(R.id.email);
-        passwordFiled = findViewById(R.id.password);
+//        emailFiled = findViewById(R.id.email);
+//        passwordFiled = findViewById(R.id.password);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();

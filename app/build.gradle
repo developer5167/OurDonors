@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            storeFile file('D:\\AndroidProjects\\OurDonors2\\key\\key.jks')
+            storeFile file('D:\\AndroidProjects\\AndroidProjects\\OurDonors2\\key\\key.jks')
             storePassword 'sam5167'
             keyAlias 'key0'
             keyPassword 'sam5167'
@@ -20,8 +20,8 @@ android {
         applicationId "com.sam.ourdonors.blooddonation"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 4
+        versionName "1.0.4"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

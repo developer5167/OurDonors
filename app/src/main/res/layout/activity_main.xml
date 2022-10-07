@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/main_color"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/main_color"
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_weight="1"
+
         android:id="@+id/text"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:fontFamily="@font/googlesans"
         android:gravity="center"
         android:text="@string/app_name"
@@ -29,13 +29,14 @@
         style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-
         android:hint="Email"
+
         android:inputType="textEmailAddress"
         android:textColorHint="@color/textColors"
+        android:visibility="gone"
         app:hintTextColor="@color/textColors">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -50,30 +51,34 @@
 
     <com.google.android.material.textfield.TextInputLayout
         style="?attr/textInputOutlinedStyle"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"  android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
         android:hint="password"
         android:textColorHint="@color/textColors"
+        android:visibility="gone"
         app:hintTextColor="@color/textColors">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:inputType="textPassword"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_back"
             android:fontFamily="@font/googlesans"
+            android:inputType="textPassword"
             android:textColor="@color/textColors" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <Button
         android:id="@+id/login"
         style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="match_parent"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp" android:layout_height="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="-5dp"
         android:enabled="true"
         android:fontFamily="@font/googlesans"
@@ -83,24 +88,23 @@
         android:text="Login"
         android:textColor="@color/main_color"
         android:textStyle="bold"
-        app:backgroundTint="@color/secondary_color"
-         />
+        android:visibility="gone"
+        app:backgroundTint="@color/secondary_color" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_in"
-
         style="@style/Widget.Material3.Button.OutlinedButton.Icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="50dp"
-        android:layout_marginStart="20dp" android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:clickable="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
         android:focusable="true"
         android:fontFamily="@font/googlesans"
         android:text="@string/google_sign_up"
         app:icon="@drawable/ic_google_icon"
         app:iconSize="30dp"
         app:iconTint="@color/secondary_color" />
-</LinearLayout>
+</RelativeLayout>
