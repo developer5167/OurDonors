@@ -39,9 +39,9 @@ public class Constants {
     public static final String USER_ID = "userId";
     public static final String SHARED_PREFS = "SHARED_PREFS";
     public static final String API = "API";
-    public static final String ENCRYPTED_KEY_1 = "AIzaSyCuu2hiMq";
-    public static final String ENCRYPTED_KEY_2 = "mqkMZFMNHtos_";
-    public static final String ENCRYPTED_KEY_3 = "8btIDx8usrSA";
+    public static final String ENCRYPTED_KEY_1 = "AIzaSyD4t6ND8";
+    public static final String ENCRYPTED_KEY_2 = "QI506MXEAWCk";
+    public static final String ENCRYPTED_KEY_3 = "ER8ZLs-WmoneAw";
     public static final String BASE_URL = "https://maps.googleapis.com/";
 
     private static APIService apiService;
