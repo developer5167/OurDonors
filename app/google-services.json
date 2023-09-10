@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "837178660537-n4uq0bghrpunh8u96f5gnj75vhn3kj82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sam.ourdonors.blooddonation",
+            "certificate_hash": "797b417bc52c0a727cc42b9b65bfd40c73b3f3fc"
+          }
+        },
+        {
+          "client_id": "837178660537-uv7mmm2uib96a1iocvqufte4k9i7vec4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sam.ourdonors.blooddonation",
+            "certificate_hash": "604f5bef3e07fdec3bdcadaf4f7475226c115976"
+          }
+        },
+        {
           "client_id": "837178660537-n2a6apv6ughjril5orma48iqg2h0iq6s.apps.googleusercontent.com",
           "client_type": 3
         }
