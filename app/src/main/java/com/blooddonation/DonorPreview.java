@@ -47,7 +47,7 @@ public class DonorPreview extends BaseActivity  {
     TextView name, requestblood_txt;
     FirebaseUser firebaseUser;
     AccountDetails selectedUserDetails, currentUserDetails;
-    APIService apiService;
+    ApiClient apiService;
 
     String user, chatId;
     static Dialog dialog;
@@ -61,7 +61,7 @@ public class DonorPreview extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donor_preview);
         getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiClient.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         user = getIntent().getStringExtra(getString(R.string.USER));
         profile_dono = findViewById(R.id.profile_dono);

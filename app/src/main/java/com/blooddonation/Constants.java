@@ -44,7 +44,7 @@ public class Constants {
     public static final String ENCRYPTED_KEY_3 = "ER8ZLs-WmoneAw";
     public static final String BASE_URL = "https://maps.googleapis.com/";
 
-    private static APIService apiService;
+    private static ApiClient apiService;
 
     public static void checkLocation(Context context) {
         GpsTracker gpsTracker = new GpsTracker(context);
@@ -65,7 +65,7 @@ public class Constants {
     }
 
     public static void send_notification(final Context context, final String user_id, final String user, final String msg, String uid, String uniqueKey) {
-        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(ApiClient.class);
 
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference().child("Tokens");
         Query query = tokens.orderByKey().equalTo(user_id);
